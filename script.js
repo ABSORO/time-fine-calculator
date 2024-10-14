@@ -105,13 +105,20 @@ function calculateTotals() {
     const hutMessage = checkForHUTCharges();
 
     // Update display
+    const timeContainer = document.getElementById('total-time-container');
     const timeElement = document.getElementById('total-time');
+    
+    // Remove any existing HUT messages
+    const existingHutMessages = timeContainer.querySelectorAll('.hut-message');
+    existingHutMessages.forEach(msg => msg.remove());
+
     timeElement.textContent = `${totalYears} years, ${totalDays} days`;
     if (hutMessage) {
         const hutElement = document.createElement('div');
         hutElement.textContent = hutMessage;
         hutElement.style.color = 'red';
-        timeElement.parentNode.insertBefore(hutElement, timeElement);
+        hutElement.className = 'hut-message';
+        timeContainer.insertBefore(hutElement, timeElement);
     }
 
     document.getElementById('total-fines').textContent = `$${totalFines}`;
@@ -128,11 +135,17 @@ function removeCharge(index) {
 function clearSelection() {
     selectedCharges = [];
     updateSelectedChargesList();
-    calculateTotals();
-    document.getElementById('charge-description').textContent = '';
+    
+    // Clear the total time and fines display
+    document.getElementById('total-time').textContent = '0 years, 0 days';
+    document.getElementById('total-fines').textContent = '$0';
+    
     // Remove any existing HUT messages
-    const hutMessages = document.querySelectorAll('#total-time-container div');
+    const timeContainer = document.getElementById('total-time-container');
+    const hutMessages = timeContainer.querySelectorAll('.hut-message');
     hutMessages.forEach(msg => msg.remove());
+    
+    document.getElementById('charge-description').textContent = '';
 }
 
 // Search charges
