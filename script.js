@@ -80,14 +80,15 @@ function calculateTotals() {
     let totalDays = 0;
     let totalYears = 0;
     let totalFines = 0;
+    let hutCharges = [];
 
     selectedCharges.forEach(charge => {
-        if (charge.timeUnit === 'days') {
+        if (charge.maxTime === 'HUT') {
+            hutCharges.push(charge.code);
+        } else if (charge.timeUnit === 'days') {
             totalDays += parseInt(charge.maxTime);
         } else if (charge.timeUnit === 'years') {
-            if (charge.maxTime !== 'HUT') {
-                totalYears += parseInt(charge.maxTime);
-            }
+            totalYears += parseInt(charge.maxTime);
         }
         if (charge.maxFine !== 'N/A') {
             totalFines += parseInt(charge.maxFine);
@@ -101,9 +102,6 @@ function calculateTotals() {
         totalDays = totalDays - (extraYears * 100 + 301);
     }
 
-    // Check for HUT charges
-    const hutMessage = checkForHUTCharges();
-
     // Update display
     const timeContainer = document.getElementById('total-time-container');
     const timeElement = document.getElementById('total-time');
@@ -113,9 +111,10 @@ function calculateTotals() {
     existingHutMessages.forEach(msg => msg.remove());
 
     timeElement.textContent = `${totalYears} years, ${totalDays} days`;
-    if (hutMessage) {
+    
+    if (hutCharges.length > 0) {
         const hutElement = document.createElement('div');
-        hutElement.textContent = hutMessage;
+        hutElement.textContent = 'HUT charges detected: ' + hutCharges.join(', ');
         hutElement.style.color = 'red';
         hutElement.className = 'hut-message';
         timeContainer.insertBefore(hutElement, timeElement);
