@@ -90,7 +90,7 @@ function calculateTotals() {
     if (totalDays >= 401) {
         let extraYears = Math.floor((totalDays - 301) / 100);
         totalYears += extraYears;
-        totalDays = (totalDays - 301) % 100 + 301;
+        totalDays = totalDays - (extraYears * 100 + 301);
     }
 
     // Update display
