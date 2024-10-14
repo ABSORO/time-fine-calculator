@@ -1,7 +1,8 @@
 let charges = [];
 let chargeDescriptions = [];
+let selectedCharges = [];
 
-// Fetch charges data
+// Load JSON data
 Promise.all([
     fetch('charges.json').then(response => response.json()),
     fetch('charge_descriptions.json').then(response => response.json())
@@ -10,10 +11,11 @@ Promise.all([
     charges = chargesData.charges;
     chargeDescriptions = descriptionsData;
     populateChargeDropdown();
+    setupEventListeners();
 })
 .catch(error => console.error('Error loading data:', error));
 
-// Modify the populateChargeDropdown function
+// Populate charge dropdown
 function populateChargeDropdown() {
     const dropdown = document.getElementById('charge-dropdown');
     charges.forEach(charge => {
@@ -24,10 +26,30 @@ function populateChargeDropdown() {
     });
 }
 
-// Add an event listener to show description
-document.getElementById('charge-dropdown').addEventListener('change', (e) => {
-    const descriptionBox = document.getElementById('charge-description');
-    const selectedCode = e.target.value;
-    const description = chargeDescriptions.find(desc => desc.code === selectedCode)?.description;
-    descriptionBox.textContent = description || 'No description available.';
-});
+// Setup event listeners
+function setupEventListeners() {
+    document.getElementById('add-charge').addEventListener('click', addCharge);
+    document.getElementById('clear-selection').addEventListener('click', clearSelection);
+    document.getElementById('search-input').addEventListener('input', searchCharges);
+}
+
+// Functions to be implemented
+function addCharge() {
+    // TODO: Implement adding a charge
+}
+
+function clearSelection() {
+    // TODO: Implement clearing the selection
+}
+
+function searchCharges() {
+    // TODO: Implement charge search
+}
+
+function updateSelectedChargesList() {
+    // TODO: Implement updating the selected charges list
+}
+
+function calculateTotals() {
+    // TODO: Implement calculation of total time and fines
+}
