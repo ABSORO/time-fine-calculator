@@ -67,6 +67,14 @@ function updateSelectedChargesList() {
     });
 }
 
+function checkForHUTCharges() {
+    const hutCharges = selectedCharges.filter(charge => charge.maxTime === 'HUT');
+    if (hutCharges.length > 0) {
+        return 'HUT charges detected: ' + hutCharges.map(charge => charge.code).join(', ');
+    }
+    return '';
+}
+
 // Calculate totals
 function calculateTotals() {
     let totalDays = 0;
@@ -93,8 +101,19 @@ function calculateTotals() {
         totalDays = totalDays - (extraYears * 100 + 301);
     }
 
+    // Check for HUT charges
+    const hutMessage = checkForHUTCharges();
+
     // Update display
-    document.getElementById('total-time').textContent = `${totalYears} years, ${totalDays} days`;
+    const timeElement = document.getElementById('total-time');
+    timeElement.textContent = `${totalYears} years, ${totalDays} days`;
+    if (hutMessage) {
+        const hutElement = document.createElement('div');
+        hutElement.textContent = hutMessage;
+        hutElement.style.color = 'red';
+        timeElement.parentNode.insertBefore(hutElement, timeElement);
+    }
+
     document.getElementById('total-fines').textContent = `$${totalFines}`;
 }
  
@@ -111,6 +130,9 @@ function clearSelection() {
     updateSelectedChargesList();
     calculateTotals();
     document.getElementById('charge-description').textContent = '';
+    // Remove any existing HUT messages
+    const hutMessages = document.querySelectorAll('#total-time-container div');
+    hutMessages.forEach(msg => msg.remove());
 }
 
 // Search charges
