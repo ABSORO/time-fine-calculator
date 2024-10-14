@@ -75,14 +75,14 @@ function calculateTotals() {
 
     selectedCharges.forEach(charge => {
         if (charge.timeUnit === 'days') {
-            totalDays += charge.maxTime;
+            totalDays += parseInt(charge.maxTime);
         } else if (charge.timeUnit === 'years') {
             if (charge.maxTime !== 'HUT') {
-                totalYears += charge.maxTime;
+                totalYears += parseInt(charge.maxTime);
             }
         }
         if (charge.maxFine !== 'N/A') {
-            totalFines += charge.maxFine;
+            totalFines += parseInt(charge.maxFine);
         }
     });
 
