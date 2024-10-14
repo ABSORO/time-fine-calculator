@@ -1,1 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranch Roleplay Time and Fine Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Time and Fine Calculator</h1>
+        <p>Use this calculator to determine the total sentencing time and fines based on selected charges from the State of Monroe Penal Code.</p>
 
+        <div class="calculator">
+            <div class="search-section">
+                <input type="text" id="search-input" placeholder="Search charges by keyword or code">
+                <select id="charge-dropdown">
+                    <option value="">Select a charge</option>
+                    <!-- Charges will be populated here by JavaScript -->
+                </select>
+                <button id="add-charge">Add Charge</button>
+            </div>
+
+            <div class="selected-charges">
+                <h2>Selected Charges</h2>
+                <ul id="selected-charges-list">
+                    <!-- Selected charges will be displayed here -->
+                </ul>
+            </div>
+
+            <div class="results">
+                <h2>Results</h2>
+                <p>Total Sentencing Time: <span id="total-time">0 days</span></p>
+                <p>Total Fines: $<span id="total-fines">0</span></p>
+            </div>
+
+            <button id="clear-selection">Clear Selection</button>
+        </div>
+
+        <div class="info-section">
+            <h2>How Sentencing Time is Calculated</h2>
+            <ul>
+                <li><strong>Charges Listed in Days:</strong>
+                    <ul>
+                        <li>Total days are summed.</li>
+                        <li>If total days are less than 401, the sentencing time remains in days.</li>
+                        <li>If total days are 401 or more, the sentencing time is converted to years:
+                            <ul>
+                                <li>401 - 500 Days: 1 Year</li>
+                                <li>501 - 600 Days: 2 Years</li>
+                                <li>And so on, incrementing by 1 year for each additional 100 days.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><strong>Charges with Fixed Sentencing in Years:</strong>
+                    <ul>
+                        <li>Fixed years are added directly to the total years.</li>
+                        <li>Not converted into days.</li>
+                    </ul>
+                </li>
+            </ul>
+            <p><strong>Note:</strong> Charges listed as years in the penal code are treated as 1440 days (24h) each. Charges not listed as years are added up using the conversion method described above.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
