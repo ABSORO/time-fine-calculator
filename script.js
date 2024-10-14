@@ -88,8 +88,9 @@ function calculateTotals() {
 
     // Convert days to years if necessary
     if (totalDays >= 401) {
-        totalYears += Math.floor((totalDays - 301) / 100);
-        totalDays = totalDays % 100 + 301;
+        let extraYears = Math.floor((totalDays - 301) / 100);
+        totalYears += extraYears;
+        totalDays = (totalDays - 301) % 100 + 301;
     }
 
     // Update display
