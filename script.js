@@ -104,22 +104,25 @@ function calculateTotals() {
 
     // Update display
     const timeContainer = document.getElementById('total-time-container');
-    const timeElement = document.getElementById('total-time');
     
     // Remove any existing HUT messages
     const existingHutMessages = timeContainer.querySelectorAll('.hut-message');
     existingHutMessages.forEach(msg => msg.remove());
 
+    // Update total time
+    const timeElement = document.getElementById('total-time');
     timeElement.textContent = `${totalYears} years, ${totalDays} days`;
     
+    // Add HUT message if applicable
     if (hutCharges.length > 0) {
-        const hutElement = document.createElement('div');
+        const hutElement = document.createElement('p');
         hutElement.textContent = 'HUT charges detected: ' + hutCharges.join(', ');
         hutElement.style.color = 'red';
         hutElement.className = 'hut-message';
-        timeContainer.insertBefore(hutElement, timeElement);
+        timeContainer.insertBefore(hutElement, timeContainer.firstChild);
     }
 
+    // Update total fines
     document.getElementById('total-fines').textContent = `$${totalFines}`;
 }
  
