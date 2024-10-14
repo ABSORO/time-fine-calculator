@@ -97,7 +97,7 @@ function calculateTotals() {
     document.getElementById('total-time').textContent = `${totalYears} years, ${totalDays} days`;
     document.getElementById('total-fines').textContent = `$${totalFines}`;
 }
-
+ 
 // Remove charge
 function removeCharge(index) {
     selectedCharges.splice(index, 1);
