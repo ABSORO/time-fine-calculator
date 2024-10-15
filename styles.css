@@ -94,3 +94,23 @@ button:hover {
         width: 100%;
     }
 }
+
+/* Important List */
+.important-info ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.important-info .info-item {
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+.important-info .info-item:nth-child(odd) {
+    background-color: #FFF8DC;  /* Light yellow, matching the theme */
+}
+
+.important-info .info-item:nth-child(even) {
+    background-color: #FAEBD7;  /* Light peach, slightly different shade */
+}
