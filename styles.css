@@ -180,4 +180,5 @@ button:hover {
     max-width: 300px;
     z-index: 100;
     display: none;
+    pointer-events: none;
 }
