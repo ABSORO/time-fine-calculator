@@ -10,46 +10,105 @@ Promise.all([
 .then(([chargesData, descriptionsData]) => {
     charges = chargesData.charges;
     chargeDescriptions = descriptionsData;
-    populateChargeDropdown();
+    setupAutocomplete();
     setupEventListeners();
 })
 .catch(error => console.error('Error loading data:', error));
 
-// Populate charge dropdown
-function populateChargeDropdown() {
-    const dropdown = document.getElementById('charge-dropdown');
-    charges.forEach(charge => {
-        const option = document.createElement('option');
-        option.value = charge.code;
-        option.textContent = `${charge.code} - ${charge.name}`;
-        dropdown.appendChild(option);
+function setupAutocomplete() {
+    const input = document.getElementById("charge-search");
+    const autocompleteList = document.getElementById("autocomplete-list");
+    let currentFocus;
+
+    input.addEventListener("input", function(e) {
+        const val = this.value;
+        closeAllLists();
+        if (!val) { return false; }
+        currentFocus = -1;
+
+        const filteredCharges = charges.filter(charge => 
+            charge.code.toLowerCase().includes(val.toLowerCase()) || 
+            charge.name.toLowerCase().includes(val.toLowerCase())
+        );
+
+        filteredCharges.forEach(charge => {
+            const div = document.createElement("DIV");
+            div.innerHTML = `<strong>${charge.code}</strong> - ${charge.name}`;
+            div.addEventListener("click", function(e) {
+                input.value = `${charge.code} - ${charge.name}`;
+                closeAllLists();
+            });
+            div.addEventListener("mouseover", function(e) {
+                showTooltip(e, charge.code);
+            });
+            div.addEventListener("mouseout", hideTooltip);
+            autocompleteList.appendChild(div);
+        });
+    });
+
+    input.addEventListener("keydown", function(e) {
+        let x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (e.keyCode == 40) {
+            currentFocus++;
+            addActive(x);
+        } else if (e.keyCode == 38) {
+            currentFocus--;
+            addActive(x);
+        } else if (e.keyCode == 13) {
+            e.preventDefault();
+            if (currentFocus > -1) {
+                if (x) x[currentFocus].click();
+            }
+        }
+    });
+
+    function addActive(x) {
+        if (!x) return false;
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        x[currentFocus].classList.add("autocomplete-active");
+    }
+
+    function removeActive(x) {
+        for (let i = 0; i < x.length; i++) {
+            x[i].classList.remove("autocomplete-active");
+        }
+    }
+
+    function closeAllLists(elmnt) {
+        const x = document.getElementsByClassName("autocomplete-items");
+        for (let i = 0; i < x.length; i++) {
+            if (elmnt != x[i] && elmnt != input) {
+                x[i].parentNode.removeChild(x[i]);
+            }
+        }
+    }
+
+    document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
     });
 }
 
-// Setup event listeners
 function setupEventListeners() {
     document.getElementById('add-charge').addEventListener('click', addCharge);
     document.getElementById('clear-selection').addEventListener('click', clearSelection);
-    document.getElementById('search-input').addEventListener('input', searchCharges);
 }
 
-// Functions to be implemented
-// Add charge to selection
 function addCharge() {
-    const dropdown = document.getElementById('charge-dropdown');
-    const selectedCharge = charges.find(charge => charge.code === dropdown.value);
+    const input = document.getElementById('charge-search');
+    const selectedCharge = charges.find(charge => 
+        `${charge.code} - ${charge.name}` === input.value
+    );
     if (selectedCharge) {
         selectedCharges.push(selectedCharge);
         updateSelectedChargesList();
         calculateTotals();
-        
-        // Display the description
-        const description = chargeDescriptions.find(desc => desc.code === selectedCharge.code)?.description;
-        document.getElementById('charge-description').textContent = description || 'No description available.';
+        input.value = ''; // Clear the input after adding
     }
 }
 
-// Update selected charges list
 function updateSelectedChargesList() {
     const list = document.getElementById('selected-charges-list');
     list.innerHTML = '';
@@ -63,19 +122,38 @@ function updateSelectedChargesList() {
         removeButton.onclick = () => removeCharge(index);
         li.appendChild(removeButton);
         
+        // Add hover functionality
+        li.addEventListener("mouseover", function(e) {
+            showTooltip(e, charge.code);
+        });
+        li.addEventListener("mouseout", hideTooltip);
+        
         list.appendChild(li);
     });
 }
 
-function checkForHUTCharges() {
-    const hutCharges = selectedCharges.filter(charge => charge.maxTime === 'HUT');
-    if (hutCharges.length > 0) {
-        return 'HUT charges detected: ' + hutCharges.map(charge => charge.code).join(', ');
+function showTooltip(e, chargeCode) {
+    const description = chargeDescriptions.find(desc => desc.code === chargeCode)?.description;
+    if (description) {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.textContent = description;
+        document.body.appendChild(tooltip);
+        
+        const rect = e.target.getBoundingClientRect();
+        tooltip.style.left = `${rect.right + 10}px`;
+        tooltip.style.top = `${rect.top}px`;
+        tooltip.style.display = 'block';
     }
-    return '';
 }
 
-// Calculate totals
+function hideTooltip() {
+    const tooltip = document.querySelector('.tooltip');
+    if (tooltip) {
+        tooltip.remove();
+    }
+}
+
 function calculateTotals() {
     let totalDays = 0;
     let totalYears = 0;
@@ -125,15 +203,13 @@ function calculateTotals() {
     // Update total fines
     document.getElementById('total-fines').textContent = `$${totalFines}`;
 }
- 
-// Remove charge
+
 function removeCharge(index) {
     selectedCharges.splice(index, 1);
     updateSelectedChargesList();
     calculateTotals();
 }
 
-// Clear selection
 function clearSelection() {
     selectedCharges = [];
     updateSelectedChargesList();
@@ -149,22 +225,3 @@ function clearSelection() {
     
     document.getElementById('charge-description').textContent = '';
 }
-
-// Search charges
-function searchCharges() {
-    const searchTerm = document.getElementById('search-input').value.toLowerCase();
-    const dropdown = document.getElementById('charge-dropdown');
-    
-    dropdown.innerHTML = '<option value="">Select a charge</option>';
-    
-    charges.filter(charge => 
-        charge.code.toLowerCase().includes(searchTerm) || 
-        charge.name.toLowerCase().includes(searchTerm)
-    ).forEach(charge => {
-        const option = document.createElement('option');
-        option.value = charge.code;
-        option.textContent = `${charge.code} - ${charge.name}`;
-        dropdown.appendChild(option);
-    });
-}
-
