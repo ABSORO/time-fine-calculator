@@ -83,13 +83,18 @@ function updateSelectedChargesList() {
     list.innerHTML = '';
     selectedCharges.forEach((charge, index) => {
         const li = document.createElement('li');
-        li.textContent = `${charge.code} - ${charge.name} (${charge.maxTime} ${charge.timeUnit}, $${charge.maxFine})`;
         
         // Add remove button
-        const removeButton = document.createElement('button');
-        removeButton.textContent = 'Remove';
+        const removeButton = document.createElement('span');
+        removeButton.textContent = '−';
+        removeButton.className = 'remove-charge';
         removeButton.onclick = () => removeCharge(index);
         li.appendChild(removeButton);
+        
+        // Add charge text
+        const chargeText = document.createElement('span');
+        chargeText.textContent = `${charge.code} - ${charge.name} (${charge.maxTime} ${charge.timeUnit}, $${charge.maxFine})`;
+        li.appendChild(chargeText);
         
         // Add hover functionality
         li.addEventListener("mouseover", function(e) {
