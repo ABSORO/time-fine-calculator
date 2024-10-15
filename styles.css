@@ -202,28 +202,47 @@ button:hover {
 .charge-details {
     font-size: 0.9em;
     color: var(--secondary-text);
-}
-
 .modifier-buttons {
     display: flex;
-    gap: 0; /* Remove the gap between buttons */
     margin-left: 10px;
+    border: 1px solid var(--accent);
+    border-radius: 3px;
+    overflow: hidden;
 }
 
 .modifier-button {
-    padding: 2px 5px;
+    padding: 4px 8px;
     font-size: 12px;
     background-color: var(--accent);
     color: var(--text);
     border: none;
-    border-radius: 3px;
     cursor: pointer;
+    position: relative;
+    transition: background-color 0.2s ease;
 }
 
-/* Add this to remove any default button margins */
+.modifier-buttons:hover {
+    box-shadow: 0 0 5px rgba(114, 137, 218, 0.5); /* var(--accent) with some transparency */
+}
+
+.modifier-button:active {
+    background-color: #4e5d94; /* Slightly darker than the hover state */
+}
+
+.modifier-button:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 20%;
+    height: 60%;
+    width: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
 .modifier-button + .modifier-button {
     margin-left: 0;
 }
+
 
 .modifier-button:hover {
     background-color: #5b6eae;
