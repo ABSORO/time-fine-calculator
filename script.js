@@ -75,7 +75,10 @@ function populateDropdown(chargesToShow) {
             const button = document.createElement('button');
             button.className = 'modifier-button';
             button.textContent = modifier.abbr;
-            button.addEventListener('click', () => addCharge(charge, modifier));
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                addCharge(charge, modifier);
+            });
             button.addEventListener('mouseover', (e) => {
                 e.stopPropagation();
                 showModifierTooltip(e, modifier);
@@ -137,7 +140,10 @@ function updateSelectedChargesList() {
             <span class="remove-charge">−</span>
             <span>${charge.code} - ${charge.name} ${charge.modifier ? `(${charge.modifier.abbr})` : ''} (${charge.maxTime} ${charge.timeUnit}, $${charge.maxFine})</span>
         `;
-        li.querySelector('.remove-charge').onclick = () => removeCharge(index);
+        li.querySelector('.remove-charge').onclick = (e) => {
+            e.stopPropagation();
+            removeCharge(index);
+        };
         li.addEventListener("mouseover", (e) => showChargeTooltip(e, charge));
         li.addEventListener("mouseout", hideTooltip);
         list.appendChild(li);
