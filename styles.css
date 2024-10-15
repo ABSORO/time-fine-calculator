@@ -68,10 +68,31 @@ button:hover {
 }
 
 #selected-charges-list li {
+    display: flex;
+    align-items: center;
     background-color: #FAEBD7;
     margin-bottom: 5px;
     padding: 10px;
     border-radius: 4px;
+}
+
+.remove-charge {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #8B4513;
+    color: white;
+    font-size: 18px;
+    margin-right: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.remove-charge:hover {
+    background-color: #A0522D;
 }
 
 .info-section {
