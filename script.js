@@ -68,7 +68,7 @@ function setupAutocomplete() {
                 input.value = `${charge.code} - ${charge.name}`;
                 dropdown.style.display = "none";
                 addCharge(charge);
-                hideTooltip(); // Hide tooltip when charge is selected
+                hideTooltip();
             });
             div.addEventListener("mouseover", function(e) {
                 showTooltip(e, charge.code);
@@ -96,12 +96,15 @@ function setupModifiers() {
         checkbox.addEventListener('change', calculateTotals);
         const label = document.createElement('label');
         label.htmlFor = modifier.code;
-        label.textContent = `${modifier.code} - ${modifier.name} (${modifier.effect})`;
+        label.innerHTML = `${checkbox.outerHTML} ${modifier.code} - ${modifier.name}`;
+        const effect = document.createElement('div');
+        effect.className = 'modifier-effect';
+        effect.textContent = `Effect: ${modifier.effect}`;
         const description = document.createElement('p');
         description.className = 'modifier-description';
         description.textContent = modifier.description;
-        div.appendChild(checkbox);
         div.appendChild(label);
+        div.appendChild(effect);
         div.appendChild(description);
         modifierContainer.appendChild(div);
     });
