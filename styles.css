@@ -182,3 +182,25 @@ button:hover {
     display: none;
     pointer-events: none;
 }
+
+.select-items div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+
+.charge-details {
+    font-size: 0.9em;
+    color: #666;
+}
+
+#modifier-container {
+    margin-bottom: 15px;
+}
+
+#modifier-container label {
+    margin-right: 15px;
+}
