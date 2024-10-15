@@ -218,9 +218,9 @@ function updateDisplay(years, days, fines, hutCharges) {
 
     const timeElement = document.getElementById('total-time');
     timeElement.textContent = `${years} years, ${days} days`;
-    timeElement.className = years > 7 ? 'exceeded' : '';
+    timeElement.className = years >= 7 ? 'exceeded' : '';
     
-    if (years > 7) {
+    if (years >= 7) {
         const limitExceeded = document.createElement('span');
         limitExceeded.className = 'limit-exceeded';
         limitExceeded.innerHTML = ' &#9432;';
@@ -230,9 +230,9 @@ function updateDisplay(years, days, fines, hutCharges) {
 
     const fineElement = document.getElementById('total-fines');
     fineElement.textContent = `$${fines}`;
-    fineElement.className = fines > 300 ? 'exceeded' : '';
+    fineElement.className = fines >= 300 ? 'exceeded' : '';
     
-    if (fines > 300) {
+    if (fines >= 300) {
         const limitExceeded = document.createElement('span');
         limitExceeded.className = 'limit-exceeded';
         limitExceeded.innerHTML = ' &#9432;';
@@ -259,7 +259,9 @@ function clearSelection() {
     updateSelectedChargesList();
     
     document.getElementById('total-time').textContent = '0 years, 0 days';
+    document.getElementById('total-time').className = '';
     document.getElementById('total-fines').textContent = '$0';
+    document.getElementById('total-fines').className = '';
     
     const timeContainer = document.getElementById('total-time-container');
     timeContainer.querySelectorAll('.hut-message, .limit-exceeded').forEach(msg => msg.remove());
