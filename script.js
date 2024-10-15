@@ -67,8 +67,8 @@ function populateDropdown(chargesToShow) {
                 addCharge(charge);
             }
         });
-        div.querySelector('.charge-info').addEventListener("mouseover", (e) => showChargeTooltip(e, charge));
-        div.querySelector('.charge-info').addEventListener("mouseout", hideTooltip);
+        div.addEventListener("mouseover", (e) => showChargeTooltip(e, charge));
+        div.addEventListener("mouseout", hideTooltip);
 
         const modifierButtons = div.querySelector('.modifier-buttons');
         modifiers.forEach(modifier => {
@@ -151,8 +151,8 @@ function showChargeTooltip(e, charge) {
         const tooltip = document.createElement('div');
         tooltip.className = 'tooltip';
         tooltip.innerHTML = `
-            ${description}
-            <span class="charge-type ${getChargeClass(charge.code)}">${getChargeType(getChargeClass(charge.code))}</span>
+            <p class="tooltip-description">${description}</p>
+            <p class="charge-type ${getChargeClass(charge.code)}">${getChargeType(getChargeClass(charge.code))}</p>
         `;
         document.body.appendChild(tooltip);
         
