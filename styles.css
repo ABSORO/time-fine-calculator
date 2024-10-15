@@ -9,7 +9,14 @@
     --input-border: #202225;
     --exceeded: #ffa500;
     --tooltip-background: #4f545c;
-    --modifier-active: #5865f2;
+    --capital-felony: #ff9999;
+    --felony-first: #ffb3b3;
+    --felony-second: #ffcccc;
+    --felony-third: #ffe6e6;
+    --misdemeanor-first: #ffcc99;
+    --misdemeanor-second: #ffd9b3;
+    --misdemeanor-third: #ffe6cc;
+    --infraction: #ffffcc;
 }
 
 body {
@@ -116,29 +123,6 @@ button:hover {
     background-color: #5b6eae;
 }
 
-.info-section {
-    background-color: var(--secondary-background);
-    padding: 15px;
-    border-radius: 4px;
-    margin-top: 20px;
-}
-
-.info-section ul {
-    padding-left: 20px;
-}
-
-.important-info ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.important-info .info-item {
-    padding: 10px;
-    margin-bottom: 5px;
-    border-radius: 4px;
-    background-color: var(--input-background);
-}
-
 .custom-select {
     position: relative;
     width: 100%;
@@ -180,22 +164,56 @@ button:hover {
     border: 2px solid var(--secondary-background);
 }
 
-.select-items div {
+.charge-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
     cursor: pointer;
     border-bottom: 1px solid var(--input-border);
+    position: relative;
 }
 
-.select-items div:hover {
+.charge-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+}
+
+.charge-item:hover {
     background-color: var(--hover);
+}
+
+.charge-name {
+    flex-grow: 1;
 }
 
 .charge-details {
     font-size: 0.9em;
     color: var(--secondary-text);
+    margin-right: 10px;
+}
+
+.modifier-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.modifier-button {
+    padding: 2px 5px;
+    font-size: 12px;
+    background-color: var(--accent);
+    color: var(--text);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.modifier-button:hover {
+    background-color: #5b6eae;
 }
 
 .tooltip {
@@ -208,42 +226,6 @@ button:hover {
     max-width: 300px;
     z-index: 100;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-#modifier-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.modifier-item {
-    background-color: var(--input-background);
-    border: 1px solid var(--input-border);
-    border-radius: 4px;
-    padding: 10px;
-    width: calc(33.33% - 7px);
-    box-sizing: border-box;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.modifier-item:hover {
-    background-color: var(--hover);
-}
-
-.modifier-item.active {
-    background-color: var(--modifier-active);
-}
-
-.modifier-header {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.modifier-effect {
-    font-size: 0.8em;
-    color: var(--secondary-text);
 }
 
 .exceeded {
@@ -260,23 +242,43 @@ button:hover {
     margin-top: 5px;
 }
 
+.total-days {
+    font-size: 0.8em;
+    color: var(--secondary-text);
+    margin-left: 10px;
+}
+
 #clear-selection {
     display: block;
-    margin: 0 auto 20px;
+    margin: 20px auto;
     padding: 10px 20px;
 }
 
+.capital-felony::before { background-color: var(--capital-felony); }
+.felony-first::before { background-color: var(--felony-first); }
+.felony-second::before { background-color: var(--felony-second); }
+.felony-third::before { background-color: var(--felony-third); }
+.misdemeanor-first::before { background-color: var(--misdemeanor-first); }
+.misdemeanor-second::before { background-color: var(--misdemeanor-second); }
+.misdemeanor-third::before { background-color: var(--misdemeanor-third); }
+.infraction::before { background-color: var(--infraction); }
+
 @media (max-width: 768px) {
-    .modifier-item {
-        width: calc(50% - 5px);
+    .charge-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .charge-details {
+        margin-top: 5px;
+    }
+
+    .modifier-buttons {
+        margin-top: 5px;
     }
 }
 
 @media (max-width: 480px) {
-    .modifier-item {
-        width: 100%;
-    }
-    
     input, select, button {
         width: 100%;
     }
