@@ -211,24 +211,40 @@ function calculateTotals() {
 
 function updateDisplay(years, days, fines, hutCharges) {
     const timeContainer = document.getElementById('total-time-container');
-    timeContainer.querySelectorAll('.hut-message, .max-limit-notice').forEach(msg => msg.remove());
+    const fineContainer = document.getElementById('total-fines-container');
+    
+    timeContainer.querySelectorAll('.hut-message, .limit-exceeded').forEach(msg => msg.remove());
+    fineContainer.querySelectorAll('.limit-exceeded').forEach(msg => msg.remove());
 
-    document.getElementById('total-time').textContent = `${years} years, ${days} days`;
-    document.getElementById('total-fines').textContent = `$${fines}`;
+    const timeElement = document.getElementById('total-time');
+    timeElement.textContent = `${years} years, ${days} days`;
+    timeElement.className = years > 7 ? 'exceeded' : '';
+    
+    if (years > 7) {
+        const limitExceeded = document.createElement('span');
+        limitExceeded.className = 'limit-exceeded';
+        limitExceeded.innerHTML = ' &#9432;';
+        limitExceeded.title = 'Time limit exceeded (Max: 7 years)';
+        timeElement.appendChild(limitExceeded);
+    }
+
+    const fineElement = document.getElementById('total-fines');
+    fineElement.textContent = `$${fines}`;
+    fineElement.className = fines > 300 ? 'exceeded' : '';
+    
+    if (fines > 300) {
+        const limitExceeded = document.createElement('span');
+        limitExceeded.className = 'limit-exceeded';
+        limitExceeded.innerHTML = ' &#9432;';
+        limitExceeded.title = 'Fine limit exceeded (Max: $300)';
+        fineElement.appendChild(limitExceeded);
+    }
 
     if (hutCharges.length > 0) {
         const hutElement = document.createElement('p');
         hutElement.textContent = 'HUT charges detected: ' + hutCharges.join(', ');
-        hutElement.style.color = 'red';
         hutElement.className = 'hut-message';
-        timeContainer.insertBefore(hutElement, timeContainer.firstChild);
-    }
-
-    if (years > 7 || fines > 300) {
-        const maxLimitNotice = document.createElement('p');
-        maxLimitNotice.textContent = 'Maximum overall limits exceeded!';
-        maxLimitNotice.className = 'max-limit-notice';
-        timeContainer.appendChild(maxLimitNotice);
+        timeContainer.appendChild(hutElement);
     }
 }
 
@@ -241,9 +257,16 @@ function removeCharge(index) {
 function clearSelection() {
     selectedCharges = [];
     updateSelectedChargesList();
+    
     document.getElementById('total-time').textContent = '0 years, 0 days';
     document.getElementById('total-fines').textContent = '$0';
-    document.getElementById('total-time-container').querySelectorAll('.hut-message, .max-limit-notice').forEach(msg => msg.remove());
+    
+    const timeContainer = document.getElementById('total-time-container');
+    timeContainer.querySelectorAll('.hut-message, .limit-exceeded').forEach(msg => msg.remove());
+    
+    const fineContainer = document.getElementById('total-fines-container');
+    fineContainer.querySelectorAll('.limit-exceeded').forEach(msg => msg.remove());
+    
     hideTooltip();
     document.querySelectorAll('input[name="modifier"]').forEach(checkbox => checkbox.checked = false);
 }
