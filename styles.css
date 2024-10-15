@@ -1,6 +1,7 @@
 :root {
     --background: #36393f;
     --secondary-background: #2f3136;
+    --dropdown-background: #292b2f;
     --text: #dcddde;
     --secondary-text: #8e9297;
     --accent: #7289da;
@@ -129,14 +130,14 @@ button:hover {
 }
 
 #charge-search {
-    width: 100%;
+    width: calc(100% - 20px);
     padding: 10px;
     font-size: 16px;
 }
 
 .select-items {
     position: absolute;
-    background-color: var(--input-background);
+    background-color: var(--dropdown-background);
     top: 100%;
     left: 0;
     right: 0;
@@ -228,6 +229,14 @@ button:hover {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
+.charge-type {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
 .exceeded {
     color: var(--exceeded);
 }
@@ -254,14 +263,14 @@ button:hover {
     padding: 10px 20px;
 }
 
-.capital-felony::before { background-color: var(--capital-felony); }
-.felony-first::before { background-color: var(--felony-first); }
-.felony-second::before { background-color: var(--felony-second); }
-.felony-third::before { background-color: var(--felony-third); }
-.misdemeanor-first::before { background-color: var(--misdemeanor-first); }
-.misdemeanor-second::before { background-color: var(--misdemeanor-second); }
-.misdemeanor-third::before { background-color: var(--misdemeanor-third); }
-.infraction::before { background-color: var(--infraction); }
+.capital-felony::before, .capital-felony.charge-type { background-color: var(--capital-felony); }
+.felony-first::before, .felony-first.charge-type { background-color: var(--felony-first); }
+.felony-second::before, .felony-second.charge-type { background-color: var(--felony-second); }
+.felony-third::before, .felony-third.charge-type { background-color: var(--felony-third); }
+.misdemeanor-first::before, .misdemeanor-first.charge-type { background-color: var(--misdemeanor-first); }
+.misdemeanor-second::before, .misdemeanor-second.charge-type { background-color: var(--misdemeanor-second); }
+.misdemeanor-third::before, .misdemeanor-third.charge-type { background-color: var(--misdemeanor-third); }
+.infraction::before, .infraction.charge-type { background-color: var(--infraction); }
 
 @media (max-width: 768px) {
     .charge-item {
