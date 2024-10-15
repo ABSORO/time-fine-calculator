@@ -12,13 +12,14 @@
         <p>Use this calculator to determine the total sentencing time and fines based on selected charges from the State of Monroe Penal Code.</p>
 
         <div class="calculator">
-        <div class="search-section">
-            <div class="autocomplete">
-                <input type="text" id="charge-search" placeholder="Search and select a charge">
-                <div id="autocomplete-list" class="autocomplete-items"></div>
+            <div class="search-section">
+                <div class="custom-select">
+                    <input type="text" id="charge-search" placeholder="Search charges">
+                    <div class="select-items" id="charge-dropdown">
+                        <!-- Charges will be populated here by JavaScript -->
+                    </div>
+                </div>
             </div>
-            <button id="add-charge">Add Charge</button>
-        </div>
 
             <div class="selected-charges">
                 <h2>Selected Charges</h2>
@@ -30,26 +31,26 @@
             <div class="results">
                 <h2>Results</h2>
                 <div id="total-time-container">
-                <p>Total Sentencing Time: <span id="total-time">0 years, 0 days</span></p>
-            </div>
+                    <p>Total Sentencing Time: <span id="total-time">0 years, 0 days</span></p>
+                </div>
                 <p>Total Fines: <span id="total-fines">0</span></p>
             </div>
 
             <button id="clear-selection">Clear Selection</button>
         </div>
 
-<div class="info-section important-info">
-    <h2>Important Information</h2>
-    <ul>
-        <li class="info-item">HUT = Hold Until Trial, this means that a Judge shall sentence or give them a trial depending on the individual's entered plea.</li>
-        <li class="info-item">If a trial is required, open an LFM ticket.</li>
-        <li class="info-item">When Judges are in town, a person may plea to all charges listed and the Judge will handle all sentencing or fine assignment related to any case.</li>
-        <li class="info-item">Judges may deviate from sentences listed here but MUST respect the drive for story and must never CK or sentence to life without explicit Admin approval or consent from the opposing players.</li>
-        <li class="info-item">While lawmen should feel comfortable charging criminals with the listed times and fines, they are also encouraged to lower them if the circumstances call for it. Use your judgement and help foster good storytelling so that both sides enjoy the encounters.</li>
-        <li class="info-item">If caught blatantly committing a crime, not guilty verdicts will not be entertained.</li>
-        <li class="info-item">Persons may plea Not Guilty to 1st Degree Felonies or Higher as well as any individual charges with a stated time of 1 Year or Higher. Anything else shall be appeal after the fact or handled by a Judge on scene.</li>
-    </ul>
-</div>
+        <div class="info-section important-info">
+            <h2>Important Information</h2>
+            <ul>
+                <li class="info-item">HUT = Hold Until Trial, this means that a Judge shall sentence or give them a trial depending on the individual's entered plea.</li>
+                <li class="info-item">If a trial is required, open an LFM ticket.</li>
+                <li class="info-item">When Judges are in town, a person may plea to all charges listed and the Judge will handle all sentencing or fine assignment related to any case.</li>
+                <li class="info-item">Judges may deviate from sentences listed here but MUST respect the drive for story and must never CK or sentence to life without explicit Admin approval or consent from the opposing players.</li>
+                <li class="info-item">While lawmen should feel comfortable charging criminals with the listed times and fines, they are also encouraged to lower them if the circumstances call for it. Use your judgement and help foster good storytelling so that both sides enjoy the encounters.</li>
+                <li class="info-item">If caught blatantly committing a crime, not guilty verdicts will not be entertained.</li>
+                <li class="info-item">Persons may plea Not Guilty to 1st Degree Felonies or Higher as well as any individual charges with a stated time of 1 Year or Higher. Anything else shall be appeal after the fact or handled by a Judge on scene.</li>
+            </ul>
+        </div>
 
         <div class="info-section">
             <h2>How Sentencing Time is Calculated</h2>
