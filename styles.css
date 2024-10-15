@@ -158,6 +158,22 @@ button:hover {
     overflow-y: auto;
     border: 1px solid #ddd;
     display: none;
+    scrollbar-width: thin;
+    scrollbar-color: #8B4513 #FFF8DC;
+}
+
+.select-items::-webkit-scrollbar {
+    width: 8px;
+}
+
+.select-items::-webkit-scrollbar-track {
+    background: #FFF8DC;
+}
+
+.select-items::-webkit-scrollbar-thumb {
+    background-color: #8B4513;
+    border-radius: 20px;
+    border: 3px solid #FFF8DC;
 }
 
 .select-items div {
@@ -192,15 +208,40 @@ button:hover {
 }
 
 #modifier-container {
-    margin-bottom: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .modifier-item {
-    margin-bottom: 10px;
+    background-color: #FFF8DC;
+    border: 1px solid #DEB887;
+    border-radius: 4px;
+    padding: 10px;
+    width: calc(50% - 5px);
+    box-sizing: border-box;
+}
+
+.modifier-item label {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.modifier-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.modifier-effect {
+    font-size: 0.9em;
+    color: #8B4513;
+    margin-bottom: 5px;
 }
 
 .modifier-description {
     font-size: 0.9em;
     color: #666;
-    margin-left: 25px;
+    margin-top: 5px;
 }
