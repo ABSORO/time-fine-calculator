@@ -1,11 +1,12 @@
 :root {
-    --primary: #546e7a;
-    --secondary: #78909c;
-    --background: #eceff1;
-    --text: #263238;
-    --accent: #90a4ae;
-    --light: #cfd8dc;
-    --white: #ffffff;
+    --background: #36393f;
+    --secondary-background: #2f3136;
+    --text: #dcddde;
+    --secondary-text: #8e9297;
+    --accent: #7289da;
+    --hover: #40444b;
+    --input-background: #40444b;
+    --input-border: #202225;
 }
 
 body {
@@ -20,15 +21,15 @@ body {
 .container {
     max-width: 800px;
     margin: 0 auto;
-    background-color: var(--white);
+    background-color: var(--secondary-background);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 h1, h2, h3 {
-    color: var(--primary);
-    border-bottom: 2px solid var(--secondary);
+    color: var(--text);
+    border-bottom: 2px solid var(--accent);
     padding-bottom: 10px;
 }
 
@@ -43,28 +44,30 @@ h1, h2, h3 {
 input, select, button {
     padding: 10px;
     font-size: 16px;
-    border: 1px solid var(--secondary);
+    border: 1px solid var(--input-border);
     border-radius: 4px;
+    background-color: var(--input-background);
+    color: var(--text);
 }
 
 input:focus, select:focus {
     outline: none;
-    border-color: var(--primary);
+    border-color: var(--accent);
 }
 
 button {
-    background-color: var(--secondary);
-    color: var(--white);
+    background-color: var(--accent);
+    color: var(--text);
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: var(--primary);
+    background-color: #5b6eae;
 }
 
 .selected-charges, .results {
-    background-color: var(--light);
+    background-color: var(--secondary-background);
     padding: 15px;
     border-radius: 4px;
     margin-bottom: 20px;
@@ -78,7 +81,7 @@ button:hover {
 #selected-charges-list li {
     display: flex;
     align-items: center;
-    background-color: var(--white);
+    background-color: var(--input-background);
     margin-bottom: 5px;
     padding: 10px;
     border-radius: 4px;
@@ -92,7 +95,7 @@ button:hover {
     height: 20px;
     border-radius: 50%;
     background-color: var(--accent);
-    color: var(--white);
+    color: var(--text);
     font-size: 18px;
     margin-right: 10px;
     cursor: pointer;
@@ -100,11 +103,11 @@ button:hover {
 }
 
 .remove-charge:hover {
-    background-color: var(--primary);
+    background-color: #5b6eae;
 }
 
 .info-section {
-    background-color: var(--light);
+    background-color: var(--secondary-background);
     padding: 15px;
     border-radius: 4px;
     margin-top: 20px;
@@ -123,7 +126,7 @@ button:hover {
     padding: 10px;
     margin-bottom: 5px;
     border-radius: 4px;
-    background-color: var(--white);
+    background-color: var(--input-background);
 }
 
 .custom-select {
@@ -139,14 +142,14 @@ button:hover {
 
 .select-items {
     position: absolute;
-    background-color: var(--white);
+    background-color: var(--input-background);
     top: 100%;
     left: 0;
     right: 0;
     z-index: 99;
     max-height: 300px;
     overflow-y: auto;
-    border: 1px solid var(--secondary);
+    border: 1px solid var(--input-border);
     border-top: none;
     border-radius: 0 0 4px 4px;
     display: none;
@@ -157,14 +160,14 @@ button:hover {
 }
 
 .select-items::-webkit-scrollbar-track {
-    background: var(--light);
+    background: var(--secondary-background);
     border-radius: 4px;
 }
 
 .select-items::-webkit-scrollbar-thumb {
-    background-color: var(--secondary);
+    background-color: var(--accent);
     border-radius: 4px;
-    border: 2px solid var(--light);
+    border: 2px solid var(--secondary-background);
 }
 
 .select-items div {
@@ -173,22 +176,22 @@ button:hover {
     align-items: center;
     padding: 10px;
     cursor: pointer;
-    border-bottom: 1px solid var(--light);
+    border-bottom: 1px solid var(--input-border);
 }
 
 .select-items div:hover {
-    background-color: var(--light);
+    background-color: var(--hover);
 }
 
 .charge-details {
     font-size: 0.9em;
-    color: var(--text);
+    color: var(--secondary-text);
 }
 
 .tooltip {
     position: absolute;
-    background-color: var(--primary);
-    color: var(--white);
+    background-color: var(--input-background);
+    color: var(--text);
     padding: 10px;
     border-radius: 4px;
     font-size: 14px;
@@ -205,12 +208,17 @@ button:hover {
 }
 
 .modifier-item {
-    background-color: var(--white);
-    border: 1px solid var(--secondary);
+    background-color: var(--input-background);
+    border: 1px solid var(--input-border);
     border-radius: 4px;
     padding: 10px;
     width: calc(33.33% - 7px);
     box-sizing: border-box;
+    cursor: pointer;
+}
+
+.modifier-item:hover {
+    background-color: var(--hover);
 }
 
 .modifier-item label {
@@ -219,6 +227,7 @@ button:hover {
     font-weight: bold;
     margin-bottom: 5px;
     font-size: 0.9em;
+    cursor: pointer;
 }
 
 .modifier-item input[type="checkbox"] {
@@ -227,14 +236,7 @@ button:hover {
 
 .modifier-effect {
     font-size: 0.8em;
-    color: var(--primary);
-    margin-bottom: 3px;
-}
-
-.modifier-description {
-    font-size: 0.8em;
-    color: var(--text);
-    margin: 0;
+    color: var(--secondary-text);
 }
 
 @media (max-width: 768px) {
@@ -251,4 +253,10 @@ button:hover {
     input, select, button {
         width: 100%;
     }
+}
+
+.max-limit-notice {
+    color: #ff7675;
+    font-weight: bold;
+    margin-top: 10px;
 }
