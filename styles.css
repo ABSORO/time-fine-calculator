@@ -208,7 +208,7 @@ button:hover {
     display: flex;
     margin-left: 10px;
     border: 1px solid var(--accent);
-    border-radius: 3px;
+    border-radius: 5px;
     overflow: hidden;
 }
 
