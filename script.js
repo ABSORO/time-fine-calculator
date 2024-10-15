@@ -4,6 +4,7 @@
 let charges = [];
 let chargeDescriptions = [];
 let selectedCharges = [];
+let tooltipTimeout;
 
 // Load JSON data
 Promise.all([
@@ -113,26 +114,32 @@ function updateSelectedChargesList() {
 }
 
 function showTooltip(e, chargeCode) {
-    hideTooltip(); // Hide any existing tooltip
-    const description = chargeDescriptions.find(desc => desc.code === chargeCode)?.description;
-    if (description) {
-        const tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        tooltip.textContent = description;
-        document.body.appendChild(tooltip);
-        
-        const rect = e.target.getBoundingClientRect();
-        tooltip.style.left = `${rect.right + 10}px`;
-        tooltip.style.top = `${rect.top}px`;
-        tooltip.style.display = 'block';
-    }
+    clearTimeout(tooltipTimeout);
+    tooltipTimeout = setTimeout(() => {
+        hideTooltip(); // Hide any existing tooltip
+        const description = chargeDescriptions.find(desc => desc.code === chargeCode)?.description;
+        if (description) {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.textContent = description;
+            document.body.appendChild(tooltip);
+            
+            const rect = e.currentTarget.getBoundingClientRect();
+            tooltip.style.left = `${rect.right + 10}px`;
+            tooltip.style.top = `${rect.top}px`;
+            tooltip.style.display = 'block';
+        }
+    }, 100); // 100ms delay
 }
 
 function hideTooltip() {
-    const tooltip = document.querySelector('.tooltip');
-    if (tooltip) {
-        tooltip.remove();
-    }
+    clearTimeout(tooltipTimeout);
+    tooltipTimeout = setTimeout(() => {
+        const tooltip = document.querySelector('.tooltip');
+        if (tooltip) {
+            tooltip.remove();
+        }
+    }, 100); // 100ms delay
 }
 
 function calculateTotals() {
@@ -177,33 +184,4 @@ function calculateTotals() {
         const hutElement = document.createElement('p');
         hutElement.textContent = 'HUT charges detected: ' + hutCharges.join(', ');
         hutElement.style.color = 'red';
-        hutElement.className = 'hut-message';
-        timeContainer.insertBefore(hutElement, timeContainer.firstChild);
-    }
-
-    // Update total fines
-    document.getElementById('total-fines').textContent = `$${totalFines}`;
-}
-
-function removeCharge(index) {
-    selectedCharges.splice(index, 1);
-    updateSelectedChargesList();
-    calculateTotals();
-}
-
-function clearSelection() {
-    selectedCharges = [];
-    updateSelectedChargesList();
-    
-    // Clear the total time and fines display
-    document.getElementById('total-time').textContent = '0 years, 0 days';
-    document.getElementById('total-fines').textContent = '$0';
-    
-    // Remove any existing HUT messages
-    const timeContainer = document.getElementById('total-time-container');
-    const hutMessages = timeContainer.querySelectorAll('.hut-message');
-    hutMessages.forEach(msg => msg.remove());
-    
-    document.getElementById('charge-description').textContent = '';
-    hideTooltip(); // Hide tooltip when selection is cleared
-}
+        hutElement.className
