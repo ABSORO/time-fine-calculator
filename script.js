@@ -192,8 +192,8 @@ function hideTooltip() {
 }
 
 function calculateTotals() {
-    let totalDays = 0;
-    let totalYears = 0;
+    let yearCharges = 0;
+    let dayCharges = 0;
     let totalFines = 0;
     let hutCharges = [];
 
@@ -203,10 +203,10 @@ function calculateTotals() {
 
         if (charge.maxTime === 'HUT') {
             hutCharges.push(charge.code);
-        } else if (charge.timeUnit === 'days') {
-            chargeDays = parseInt(charge.maxTime);
         } else if (charge.timeUnit === 'years') {
-            chargeDays = parseInt(charge.maxTime) * 1440; // Convert years to days
+            yearCharges += parseInt(charge.maxTime);
+        } else if (charge.timeUnit === 'days') {
+            dayCharges += parseInt(charge.maxTime);
         }
         
         if (charge.maxFine !== 'N/A') {
@@ -217,33 +217,37 @@ function calculateTotals() {
         if (charge.modifier) {
             switch(charge.modifier.code) {
                 case "P.C. 5101":
-                    chargeDays *= 0.5;
+                    if (charge.timeUnit === 'years') yearCharges *= 0.5;
+                    else dayCharges *= 0.5;
                     chargeFine *= 0.5;
                     break;
                 case "P.C. 5102":
-                    chargeDays += 60;
+                    dayCharges += 60;
                     break;
                 case "P.C. 5103":
-                    chargeDays += 3 * 1440; // 3 years
+                    yearCharges += 3;
                     break;
                 case "P.C. 5104":
-                    chargeDays += 100;
+                    dayCharges += 100;
                     break;
                 case "P.C. 5105":
-                    chargeDays += 60;
+                    dayCharges += 60;
                     break;
             }
         }
 
-        totalDays += chargeDays;
         totalFines += chargeFine;
     });
 
-    // Convert days to years based on the specified rules
-    if (totalDays >= 401) {
-        totalYears = Math.floor((totalDays - 301) / 100) + 1;
-        totalDays = totalDays - (totalYears * 100 + 301);
+    // Convert day charges to years and days
+    let additionalYears = 0;
+    if (dayCharges >= 401) {
+        additionalYears = 1 + Math.floor((dayCharges - 401) / 100);
+        dayCharges = dayCharges - (401 + (additionalYears - 1) * 100);
     }
+
+    let totalYears = yearCharges + additionalYears;
+    let totalDays = dayCharges;
 
     // Round values
     totalDays = Math.round(totalDays);
@@ -251,6 +255,7 @@ function calculateTotals() {
 
     updateDisplay(totalYears, totalDays, totalFines, hutCharges);
 }
+
 
 
 function updateDisplay(years, days, fines, hutCharges) {
