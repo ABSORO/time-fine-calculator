@@ -29,7 +29,14 @@ body {
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
-h1, h2, h3 {
+h1 {
+    color: var(--text);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+h2, h3 {
     color: var(--text);
     border-bottom: 2px solid var(--accent);
     padding-bottom: 10px;
@@ -253,6 +260,12 @@ button:hover {
 .hut-message {
     color: var(--exceeded);
     margin-top: 5px;
+}
+
+#clear-selection {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
 }
 
 @media (max-width: 768px) {
