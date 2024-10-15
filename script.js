@@ -80,18 +80,12 @@ function setupModifiers() {
         const div = document.createElement('div');
         div.className = 'modifier-item';
         div.innerHTML = `
-            <label>
-                <input type="checkbox" name="modifier" value="${modifier.code}">
-                ${modifier.code} - ${modifier.name}
-            </label>
-            <div class="modifier-effect">${modifier.effect}</div>
+            <div class="modifier-header">${modifier.code} - ${modifier.name}</div>
+            <div class="modifier-effect">Effect: ${modifier.effect}</div>
         `;
-        div.addEventListener('click', (e) => {
-            if (e.target.tagName !== 'INPUT') {
-                const checkbox = div.querySelector('input[type="checkbox"]');
-                checkbox.checked = !checkbox.checked;
-                calculateTotals();
-            }
+        div.addEventListener('click', () => {
+            div.classList.toggle('active');
+            calculateTotals();
         });
         div.addEventListener('mouseover', (e) => showTooltip(e, modifier.code, false));
         div.addEventListener('mouseout', hideTooltip);
@@ -171,8 +165,8 @@ function calculateTotals() {
         }
     });
 
-    const activeModifiers = Array.from(document.querySelectorAll('input[name="modifier"]:checked'))
-        .map(input => modifiers.find(m => m.code === input.value));
+    const activeModifiers = Array.from(document.querySelectorAll('.modifier-item.active'))
+        .map(div => modifiers.find(m => div.textContent.includes(m.code)));
     
     activeModifiers.forEach(modifier => {
         switch(modifier.code) {
@@ -224,7 +218,7 @@ function updateDisplay(years, days, fines, hutCharges) {
         const limitExceeded = document.createElement('span');
         limitExceeded.className = 'limit-exceeded';
         limitExceeded.innerHTML = ' &#9432;';
-        limitExceeded.title = 'Time limit exceeded (Max: 7 years)';
+        limitExceeded.title = 'Exceeds 7 year limit';
         timeElement.appendChild(limitExceeded);
     }
 
@@ -236,7 +230,7 @@ function updateDisplay(years, days, fines, hutCharges) {
         const limitExceeded = document.createElement('span');
         limitExceeded.className = 'limit-exceeded';
         limitExceeded.innerHTML = ' &#9432;';
-        limitExceeded.title = 'Fine limit exceeded (Max: $300)';
+        limitExceeded.title = 'Exceeds $300 limit';
         fineElement.appendChild(limitExceeded);
     }
 
@@ -270,5 +264,5 @@ function clearSelection() {
     fineContainer.querySelectorAll('.limit-exceeded').forEach(msg => msg.remove());
     
     hideTooltip();
-    document.querySelectorAll('input[name="modifier"]').forEach(checkbox => checkbox.checked = false);
+    document.querySelectorAll('.modifier-item').forEach(item => item.classList.remove('active'));
 }
