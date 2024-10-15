@@ -184,4 +184,33 @@ function calculateTotals() {
         const hutElement = document.createElement('p');
         hutElement.textContent = 'HUT charges detected: ' + hutCharges.join(', ');
         hutElement.style.color = 'red';
-        hutElement.className
+        hutElement.className = 'hut-message';
+        timeContainer.insertBefore(hutElement, timeContainer.firstChild);
+    }
+
+    // Update total fines
+    document.getElementById('total-fines').textContent = `$${totalFines}`;
+}
+
+function removeCharge(index) {
+    selectedCharges.splice(index, 1);
+    updateSelectedChargesList();
+    calculateTotals();
+}
+
+function clearSelection() {
+    selectedCharges = [];
+    updateSelectedChargesList();
+    
+    // Clear the total time and fines display
+    document.getElementById('total-time').textContent = '0 years, 0 days';
+    document.getElementById('total-fines').textContent = '$0';
+    
+    // Remove any existing HUT messages
+    const timeContainer = document.getElementById('total-time-container');
+    const hutMessages = timeContainer.querySelectorAll('.hut-message');
+    hutMessages.forEach(msg => msg.remove());
+    
+    document.getElementById('charge-description').textContent = '';
+    hideTooltip(); // Hide tooltip when selection is cleared
+}
