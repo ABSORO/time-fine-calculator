@@ -123,7 +123,30 @@ function setupEventListeners() {
 }
 
 function addCharge(charge, modifier = null) {
-    const chargeWithModifier = { ...charge, modifier };
+    let chargeWithModifier = { ...charge };
+    if (modifier) {
+        chargeWithModifier.modifier = modifier;
+        // Apply modifier effect immediately
+        switch(modifier.code) {
+            case "P.C. 5101":
+                chargeWithModifier.maxTime = charge.timeUnit === 'years' ? 
+                    charge.maxTime * 0.5 : Math.round(charge.maxTime * 0.5);
+                chargeWithModifier.maxFine = Math.round(charge.maxFine * 0.5);
+                break;
+            case "P.C. 5102":
+                if (charge.timeUnit === 'days') chargeWithModifier.maxTime += 60;
+                break;
+            case "P.C. 5103":
+                chargeWithModifier.maxTime += charge.timeUnit === 'years' ? 3 : 3 * 1440;
+                break;
+            case "P.C. 5104":
+                if (charge.timeUnit === 'days') chargeWithModifier.maxTime += 100;
+                break;
+            case "P.C. 5105":
+                if (charge.timeUnit === 'days') chargeWithModifier.maxTime += 60;
+                break;
+        }
+    }
     selectedCharges.push(chargeWithModifier);
     updateSelectedChargesList();
     calculateTotals();
@@ -140,15 +163,13 @@ function updateSelectedChargesList() {
             <span class="remove-charge">−</span>
             <span>${charge.code} - ${charge.name} ${charge.modifier ? `(${charge.modifier.abbr})` : ''} (${charge.maxTime} ${charge.timeUnit}, $${charge.maxFine})</span>
         `;
-        li.querySelector('.remove-charge').onclick = (e) => {
-            e.stopPropagation();
-            removeCharge(index);
-        };
+        li.querySelector('.remove-charge').onclick = () => removeCharge(index);
         li.addEventListener("mouseover", (e) => showChargeTooltip(e, charge));
         li.addEventListener("mouseout", hideTooltip);
         list.appendChild(li);
     });
 }
+
 
 function showChargeTooltip(e, charge) {
     hideTooltip();
@@ -198,45 +219,17 @@ function calculateTotals() {
     let hutCharges = [];
 
     selectedCharges.forEach(charge => {
-        let chargeDays = 0;
-        let chargeFine = 0;
-
         if (charge.maxTime === 'HUT') {
             hutCharges.push(charge.code);
         } else if (charge.timeUnit === 'years') {
-            yearCharges += parseInt(charge.maxTime);
+            yearCharges += parseFloat(charge.maxTime);
         } else if (charge.timeUnit === 'days') {
             dayCharges += parseInt(charge.maxTime);
         }
         
         if (charge.maxFine !== 'N/A') {
-            chargeFine = parseInt(charge.maxFine);
+            totalFines += parseInt(charge.maxFine);
         }
-
-        // Apply modifier if present
-        if (charge.modifier) {
-            switch(charge.modifier.code) {
-                case "P.C. 5101":
-                    if (charge.timeUnit === 'years') yearCharges *= 0.5;
-                    else dayCharges *= 0.5;
-                    chargeFine *= 0.5;
-                    break;
-                case "P.C. 5102":
-                    dayCharges += 60;
-                    break;
-                case "P.C. 5103":
-                    yearCharges += 3;
-                    break;
-                case "P.C. 5104":
-                    dayCharges += 100;
-                    break;
-                case "P.C. 5105":
-                    dayCharges += 60;
-                    break;
-            }
-        }
-
-        totalFines += chargeFine;
     });
 
     // Convert day charges to years and days
@@ -246,8 +239,14 @@ function calculateTotals() {
         dayCharges = dayCharges - (401 + (additionalYears - 1) * 100);
     }
 
-    let totalYears = yearCharges + additionalYears;
-    let totalDays = dayCharges;
+    let totalYears = Math.floor(yearCharges) + additionalYears;
+    let totalDays = Math.round((yearCharges % 1) * 1440 + dayCharges);
+
+    // Adjust if totalDays is 1440 or more
+    if (totalDays >= 1440) {
+        totalYears += Math.floor(totalDays / 1440);
+        totalDays = totalDays % 1440;
+    }
 
     // Round values
     totalDays = Math.round(totalDays);
@@ -255,8 +254,6 @@ function calculateTotals() {
 
     updateDisplay(totalYears, totalDays, totalFines, hutCharges);
 }
-
-
 
 function updateDisplay(years, days, fines, hutCharges) {
     const timeContainer = document.getElementById('total-time-container');
