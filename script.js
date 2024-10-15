@@ -4,6 +4,7 @@
 let charges = [];
 let chargeDescriptions = [];
 let selectedCharges = [];
+let tooltipTimeout;
 let modifiers = [
     { code: "P.C. 5101", name: "Aiding and Abetting", effect: "50% of time", description: "Consists of Aiding and Abetting, Conspiracy, and Accessory After the Fact" },
     { code: "P.C. 5102", name: "Public Servants Enhancement", effect: "Add 60 Days", description: "USE ONLY IN FELONY CRIMES. Public Servant Refers to; Law Enforcement, Government and Doctors. Shall not apply to Capital Murder" },
@@ -60,8 +61,9 @@ function setupAutocomplete() {
                 input.value = `${charge.code} - ${charge.name}`;
                 dropdown.style.display = "none";
                 addCharge(charge);
+                hideTooltip();
             });
-            div.addEventListener("mouseover", (e) => showTooltip(e, charge.code));
+            div.addEventListener("mouseover", (e) => showTooltip(e, charge.code, true));
             div.addEventListener("mouseout", hideTooltip);
             dropdown.appendChild(div);
         });
@@ -79,13 +81,20 @@ function setupModifiers() {
         div.className = 'modifier-item';
         div.innerHTML = `
             <label>
-                <input type="checkbox" name="modifier" value="${modifier.code}" id="${modifier.code}">
+                <input type="checkbox" name="modifier" value="${modifier.code}">
                 ${modifier.code} - ${modifier.name}
             </label>
             <div class="modifier-effect">${modifier.effect}</div>
-            <div class="modifier-description">${modifier.description}</div>
         `;
-        div.querySelector('input').addEventListener('change', calculateTotals);
+        div.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'INPUT') {
+                const checkbox = div.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+                calculateTotals();
+            }
+        });
+        div.addEventListener('mouseover', (e) => showTooltip(e, modifier.code, false));
+        div.addEventListener('mouseout', hideTooltip);
         modifierContainer.appendChild(div);
     });
 }
@@ -112,22 +121,24 @@ function updateSelectedChargesList() {
             e.stopPropagation();
             removeCharge(index);
         };
-        li.addEventListener("mouseover", (e) => showTooltip(e, charge.code));
+        li.addEventListener("mouseover", (e) => showTooltip(e, charge.code, true));
         li.addEventListener("mouseout", hideTooltip);
         list.appendChild(li);
     });
 }
 
-function showTooltip(e, chargeCode) {
+function showTooltip(e, code, isCharge) {
     hideTooltip();
-    const description = chargeDescriptions.find(desc => desc.code === chargeCode)?.description;
+    const description = isCharge 
+        ? chargeDescriptions.find(desc => desc.code === code)?.description
+        : modifiers.find(mod => mod.code === code)?.description;
     if (description) {
         const tooltip = document.createElement('div');
         tooltip.className = 'tooltip';
         tooltip.textContent = description;
         document.body.appendChild(tooltip);
         
-        const rect = e.target.getBoundingClientRect();
+        const rect = e.currentTarget.getBoundingClientRect();
         const scrollY = window.scrollY || window.pageYOffset;
         
         tooltip.style.left = `${rect.right + 10}px`;
@@ -200,7 +211,7 @@ function calculateTotals() {
 
 function updateDisplay(years, days, fines, hutCharges) {
     const timeContainer = document.getElementById('total-time-container');
-    timeContainer.querySelectorAll('.hut-message').forEach(msg => msg.remove());
+    timeContainer.querySelectorAll('.hut-message, .max-limit-notice').forEach(msg => msg.remove());
 
     document.getElementById('total-time').textContent = `${years} years, ${days} days`;
     document.getElementById('total-fines').textContent = `$${fines}`;
@@ -211,6 +222,13 @@ function updateDisplay(years, days, fines, hutCharges) {
         hutElement.style.color = 'red';
         hutElement.className = 'hut-message';
         timeContainer.insertBefore(hutElement, timeContainer.firstChild);
+    }
+
+    if (years > 7 || fines > 300) {
+        const maxLimitNotice = document.createElement('p');
+        maxLimitNotice.textContent = 'Maximum overall limits exceeded!';
+        maxLimitNotice.className = 'max-limit-notice';
+        timeContainer.appendChild(maxLimitNotice);
     }
 }
 
@@ -225,7 +243,7 @@ function clearSelection() {
     updateSelectedChargesList();
     document.getElementById('total-time').textContent = '0 years, 0 days';
     document.getElementById('total-fines').textContent = '$0';
-    document.getElementById('total-time-container').querySelectorAll('.hut-message').forEach(msg => msg.remove());
+    document.getElementById('total-time-container').querySelectorAll('.hut-message, .max-limit-notice').forEach(msg => msg.remove());
     hideTooltip();
     document.querySelectorAll('input[name="modifier"]').forEach(checkbox => checkbox.checked = false);
 }
