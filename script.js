@@ -5,6 +5,11 @@ let charges = [];
 let chargeDescriptions = [];
 let selectedCharges = [];
 let tooltipTimeout;
+let modifiers = [
+    { name: "Attempt", multiplier: 0.5 },
+    { name: "Accessory", multiplier: 0.75 },
+    { name: "Conspiracy", multiplier: 0.5 }
+];
 
 // Load JSON data
 Promise.all([
@@ -16,6 +21,7 @@ Promise.all([
     chargeDescriptions = descriptionsData;
     setupAutocomplete();
     setupEventListeners();
+    setupModifiers();
 })
 .catch(error => console.error('Error loading data:', error));
 
@@ -52,9 +58,12 @@ function setupAutocomplete() {
         dropdown.innerHTML = '';
         chargesToShow.forEach(charge => {
             const div = document.createElement("div");
-            div.textContent = `${charge.code} - ${charge.name}`;
+            div.innerHTML = `
+                <span>${charge.code} - ${charge.name}</span>
+                <span class="charge-details">${charge.maxTime} ${charge.timeUnit}, $${charge.maxFine}</span>
+            `;
             div.addEventListener("click", function() {
-                input.value = this.textContent;
+                input.value = `${charge.code} - ${charge.name}`;
                 dropdown.style.display = "none";
                 addCharge(charge);
                 hideTooltip(); // Hide tooltip when charge is selected
@@ -70,6 +79,21 @@ function setupAutocomplete() {
 
 function setupEventListeners() {
     document.getElementById('clear-selection').addEventListener('click', clearSelection);
+}
+
+function setupModifiers() {
+    const modifierContainer = document.getElementById('modifier-container');
+    modifiers.forEach(modifier => {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.name = 'modifier';
+        checkbox.value = modifier.name;
+        checkbox.addEventListener('change', calculateTotals);
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(` ${modifier.name}`));
+        modifierContainer.appendChild(label);
+    });
 }
 
 function addCharge(selectedCharge) {
@@ -148,16 +172,20 @@ function calculateTotals() {
     let totalFines = 0;
     let hutCharges = [];
 
+    const activeModifiers = Array.from(document.querySelectorAll('input[name="modifier"]:checked'))
+        .map(input => modifiers.find(m => m.name === input.value));
+    const modifierMultiplier = activeModifiers.reduce((acc, modifier) => acc * modifier.multiplier, 1);
+
     selectedCharges.forEach(charge => {
         if (charge.maxTime === 'HUT') {
             hutCharges.push(charge.code);
         } else if (charge.timeUnit === 'days') {
-            totalDays += parseInt(charge.maxTime);
+            totalDays += parseInt(charge.maxTime) * modifierMultiplier;
         } else if (charge.timeUnit === 'years') {
-            totalYears += parseInt(charge.maxTime);
+            totalYears += parseInt(charge.maxTime) * modifierMultiplier;
         }
         if (charge.maxFine !== 'N/A') {
-            totalFines += parseInt(charge.maxFine);
+            totalFines += parseInt(charge.maxFine) * modifierMultiplier;
         }
     });
 
@@ -167,6 +195,11 @@ function calculateTotals() {
         totalYears += extraYears;
         totalDays = totalDays - (extraYears * 100 + 301);
     }
+
+    // Round values
+    totalDays = Math.round(totalDays);
+    totalYears = Math.round(totalYears);
+    totalFines = Math.round(totalFines);
 
     // Update display
     const timeContainer = document.getElementById('total-time-container');
@@ -213,4 +246,7 @@ function clearSelection() {
     
     document.getElementById('charge-description').textContent = '';
     hideTooltip(); // Hide tooltip when selection is cleared
+
+    // Uncheck all modifiers
+    document.querySelectorAll('input[name="modifier"]').forEach(checkbox => checkbox.checked = false);
 }
