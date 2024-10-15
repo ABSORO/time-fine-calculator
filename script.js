@@ -56,8 +56,10 @@ function populateDropdown(chargesToShow) {
         const div = document.createElement("div");
         div.className = 'charge-item ' + getChargeClass(charge.code);
         div.innerHTML = `
-            <span class="charge-name">${charge.code} - ${charge.name}</span>
-            <span class="charge-details">${charge.maxTime} ${charge.timeUnit}, $${charge.maxFine}</span>
+            <div class="charge-info">
+                <span class="charge-name">${charge.code} - ${charge.name}</span>
+                <span class="charge-details">${charge.maxTime} ${charge.timeUnit}, $${charge.maxFine}</span>
+            </div>
             <div class="modifier-buttons"></div>
         `;
         div.addEventListener("click", (e) => {
@@ -65,8 +67,8 @@ function populateDropdown(chargesToShow) {
                 addCharge(charge);
             }
         });
-        div.addEventListener("mouseover", (e) => showTooltip(e, charge.code));
-        div.addEventListener("mouseout", hideTooltip);
+        div.querySelector('.charge-info').addEventListener("mousemove", (e) => showChargeTooltip(e, charge.code));
+        div.querySelector('.charge-info').addEventListener("mouseout", hideTooltip);
 
         const modifierButtons = div.querySelector('.modifier-buttons');
         modifiers.forEach(modifier => {
@@ -119,30 +121,38 @@ function updateSelectedChargesList() {
             <span>${charge.code} - ${charge.name} ${charge.modifier ? `(${charge.modifier.abbr})` : ''} (${charge.maxTime} ${charge.timeUnit}, $${charge.maxFine})</span>
         `;
         li.querySelector('.remove-charge').onclick = () => removeCharge(index);
-        li.addEventListener("mouseover", (e) => showTooltip(e, charge.code));
+        li.addEventListener("mouseover", (e) => showChargeTooltip(e, charge.code));
         li.addEventListener("mouseout", hideTooltip);
         list.appendChild(li);
     });
 }
 
-function showTooltip(e, chargeCode) {
-    const description = chargeDescriptions.find(desc => desc.code === chargeCode)?.description;
-    if (description) {
-        const tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        tooltip.textContent = description;
-        document.body.appendChild(tooltip);
-        
-        const rect = e.currentTarget.getBoundingClientRect();
-        tooltip.style.left = `${rect.right + 10}px`;
-        tooltip.style.top = `${rect.top}px`;
-        tooltip.style.display = 'block';
+function showChargeTooltip(e, chargeCode) {
+    const chargeInfo = e.currentTarget;
+    const rect = chargeInfo.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left; // X position within the element
+
+    // Only show tooltip if mouse is in the left half of the charge info
+    if (mouseX < rect.width / 2) {
+        const description = chargeDescriptions.find(desc => desc.code === chargeCode)?.description;
+        if (description) {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.textContent = description;
+            document.body.appendChild(tooltip);
+            
+            tooltip.style.left = `${rect.left}px`;
+            tooltip.style.top = `${rect.bottom + window.scrollY}px`;
+            tooltip.style.display = 'block';
+        }
+    } else {
+        hideTooltip();
     }
 }
 
 function showModifierTooltip(e, modifier) {
     const tooltip = document.createElement('div');
-    tooltip.className = 'tooltip';
+    tooltip.className = 'tooltip modifier-tooltip';
     tooltip.innerHTML = `
         <small>${modifier.code}</small><br>
         ${modifier.name}<br>
@@ -151,14 +161,14 @@ function showModifierTooltip(e, modifier) {
     document.body.appendChild(tooltip);
     
     const rect = e.currentTarget.getBoundingClientRect();
-    tooltip.style.left = `${rect.right + 10}px`;
+    tooltip.style.left = `${rect.right + 5}px`;
     tooltip.style.top = `${rect.top}px`;
     tooltip.style.display = 'block';
 }
 
 function hideTooltip() {
-    const tooltip = document.querySelector('.tooltip');
-    if (tooltip) tooltip.remove();
+    const tooltips = document.querySelectorAll('.tooltip');
+    tooltips.forEach(tooltip => tooltip.remove());
 }
 
 function calculateTotals() {
