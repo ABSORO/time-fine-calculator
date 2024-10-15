@@ -7,6 +7,8 @@
     --hover: #40444b;
     --input-background: #40444b;
     --input-border: #202225;
+    --exceeded: #ffa500;
+    --tooltip-background: #4f545c;
 }
 
 body {
@@ -190,7 +192,7 @@ button:hover {
 
 .tooltip {
     position: absolute;
-    background-color: var(--input-background);
+    background-color: var(--tooltip-background);
     color: var(--text);
     padding: 10px;
     border-radius: 4px;
@@ -239,6 +241,20 @@ button:hover {
     color: var(--secondary-text);
 }
 
+.exceeded {
+    color: var(--exceeded);
+}
+
+.limit-exceeded {
+    cursor: help;
+    margin-left: 5px;
+}
+
+.hut-message {
+    color: var(--exceeded);
+    margin-top: 5px;
+}
+
 @media (max-width: 768px) {
     .modifier-item {
         width: calc(50% - 5px);
@@ -254,10 +270,3 @@ button:hover {
         width: 100%;
     }
 }
-
-.max-limit-notice {
-    color: #ff7675;
-    font-weight: bold;
-    margin-top: 10px;
-}
- 
