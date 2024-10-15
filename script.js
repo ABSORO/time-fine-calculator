@@ -218,7 +218,7 @@ function updateDisplay(years, days, fines, hutCharges) {
         const limitExceeded = document.createElement('span');
         limitExceeded.className = 'limit-exceeded';
         limitExceeded.innerHTML = ' &#9432;';
-        limitExceeded.title = 'Exceeds 7 year limit';
+        limitExceeded.title = '7 years max';
         timeElement.appendChild(limitExceeded);
     }
 
@@ -230,7 +230,7 @@ function updateDisplay(years, days, fines, hutCharges) {
         const limitExceeded = document.createElement('span');
         limitExceeded.className = 'limit-exceeded';
         limitExceeded.innerHTML = ' &#9432;';
-        limitExceeded.title = 'Exceeds $300 limit';
+        limitExceeded.title = '$300 max';
         fineElement.appendChild(limitExceeded);
     }
 
