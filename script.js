@@ -67,7 +67,7 @@ function populateDropdown(chargesToShow) {
                 addCharge(charge);
             }
         });
-        div.querySelector('.charge-info').addEventListener("mousemove", (e) => showChargeTooltip(e, charge.code));
+        div.querySelector('.charge-info').addEventListener("mouseover", (e) => showChargeTooltip(e, charge));
         div.querySelector('.charge-info').addEventListener("mouseout", hideTooltip);
 
         const modifierButtons = div.querySelector('.modifier-buttons');
@@ -76,7 +76,10 @@ function populateDropdown(chargesToShow) {
             button.className = 'modifier-button';
             button.textContent = modifier.abbr;
             button.addEventListener('click', () => addCharge(charge, modifier));
-            button.addEventListener('mouseover', (e) => showModifierTooltip(e, modifier));
+            button.addEventListener('mouseover', (e) => {
+                e.stopPropagation();
+                showModifierTooltip(e, modifier);
+            });
             button.addEventListener('mouseout', hideTooltip);
             modifierButtons.appendChild(button);
         });
@@ -96,6 +99,20 @@ function getChargeClass(code) {
     if (pcNumber >= 3301 && pcNumber <= 3306) return 'misdemeanor-third';
     if (pcNumber >= 4101 && pcNumber <= 4103) return 'infraction';
     return '';
+}
+
+function getChargeType(chargeClass) {
+    switch(chargeClass) {
+        case 'capital-felony': return 'Capital Felony';
+        case 'felony-first': return 'State Felony 1st Degree';
+        case 'felony-second': return 'State Felony 2nd Degree';
+        case 'felony-third': return 'State Felony 3rd Degree';
+        case 'misdemeanor-first': return 'Misdemeanor 1st Degree';
+        case 'misdemeanor-second': return 'Misdemeanor 2nd Degree';
+        case 'misdemeanor-third': return 'Misdemeanor 3rd Degree';
+        case 'infraction': return 'Non-Criminal Infraction';
+        default: return '';
+    }
 }
 
 function setupEventListeners() {
@@ -121,36 +138,33 @@ function updateSelectedChargesList() {
             <span>${charge.code} - ${charge.name} ${charge.modifier ? `(${charge.modifier.abbr})` : ''} (${charge.maxTime} ${charge.timeUnit}, $${charge.maxFine})</span>
         `;
         li.querySelector('.remove-charge').onclick = () => removeCharge(index);
-        li.addEventListener("mouseover", (e) => showChargeTooltip(e, charge.code));
+        li.addEventListener("mouseover", (e) => showChargeTooltip(e, charge));
         li.addEventListener("mouseout", hideTooltip);
         list.appendChild(li);
     });
 }
 
-function showChargeTooltip(e, chargeCode) {
-    const chargeInfo = e.currentTarget;
-    const rect = chargeInfo.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left; // X position within the element
-
-    // Only show tooltip if mouse is in the left half of the charge info
-    if (mouseX < rect.width / 2) {
-        const description = chargeDescriptions.find(desc => desc.code === chargeCode)?.description;
-        if (description) {
-            const tooltip = document.createElement('div');
-            tooltip.className = 'tooltip';
-            tooltip.textContent = description;
-            document.body.appendChild(tooltip);
-            
-            tooltip.style.left = `${rect.left}px`;
-            tooltip.style.top = `${rect.bottom + window.scrollY}px`;
-            tooltip.style.display = 'block';
-        }
-    } else {
-        hideTooltip();
+function showChargeTooltip(e, charge) {
+    hideTooltip();
+    const description = chargeDescriptions.find(desc => desc.code === charge.code)?.description;
+    if (description) {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.innerHTML = `
+            ${description}
+            <span class="charge-type ${getChargeClass(charge.code)}">${getChargeType(getChargeClass(charge.code))}</span>
+        `;
+        document.body.appendChild(tooltip);
+        
+        const rect = e.currentTarget.getBoundingClientRect();
+        tooltip.style.left = `${rect.right + 10}px`;
+        tooltip.style.top = `${rect.top}px`;
+        tooltip.style.display = 'block';
     }
 }
 
 function showModifierTooltip(e, modifier) {
+    hideTooltip();
     const tooltip = document.createElement('div');
     tooltip.className = 'tooltip modifier-tooltip';
     tooltip.innerHTML = `
