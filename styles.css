@@ -95,7 +95,6 @@ button:hover {
     }
 }
 
-/* Important List */
 .important-info ul {
     list-style-type: none;
     padding: 0;
@@ -108,46 +107,46 @@ button:hover {
 }
 
 .important-info .info-item:nth-child(odd) {
-    background-color: #FFF8DC;  /* Light yellow, matching the theme */
+    background-color: #FFF8DC;
 }
 
 .important-info .info-item:nth-child(even) {
-    background-color: #FAEBD7;  /* Light peach, slightly different shade */
+    background-color: #FAEBD7;
 }
 
-.autocomplete {
+.custom-select {
     position: relative;
-    display: inline-block;
     width: 100%;
+    margin-bottom: 15px;
 }
 
-.autocomplete-items {
+#charge-search {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.select-items {
     position: absolute;
-    border: 1px solid #d4d4d4;
-    border-bottom: none;
-    border-top: none;
-    z-index: 99;
+    background-color: #f9f9f9;
     top: 100%;
     left: 0;
     right: 0;
-    max-height: 200px;
+    z-index: 99;
+    max-height: 300px;
     overflow-y: auto;
+    border: 1px solid #ddd;
+    display: none;
 }
 
-.autocomplete-items div {
+.select-items div {
     padding: 10px;
     cursor: pointer;
-    background-color: #fff; 
-    border-bottom: 1px solid #d4d4d4; 
+    border-bottom: 1px solid #ddd;
 }
 
-.autocomplete-items div:hover {
-    background-color: #e9e9e9; 
-}
-
-.autocomplete-active {
-    background-color: #DEB887 !important; 
-    color: #ffffff; 
+.select-items div:hover {
+    background-color: #e9e9e9;
 }
 
 .tooltip {
