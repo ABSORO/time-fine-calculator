@@ -6,9 +6,11 @@ let chargeDescriptions = [];
 let selectedCharges = [];
 let tooltipTimeout;
 let modifiers = [
-    { name: "Attempt", multiplier: 0.5 },
-    { name: "Accessory", multiplier: 0.75 },
-    { name: "Conspiracy", multiplier: 0.5 }
+    { code: "P.C. 5101", name: "Aiding and Abetting", effect: "50% of time", description: "Consists of Aiding and Abetting, Conspiracy, and Accessory After the Fact" },
+    { code: "P.C. 5102", name: "Public Servants Enhancement", effect: "Add 60 Days", description: "USE ONLY IN FELONY CRIMES. Public Servant Refers to; Law Enforcement, Government and Doctors. Shall not apply to Capital Murder" },
+    { code: "P.C. 5103", name: "Threat to Society", effect: "Add 3 Years", description: "Decided by Judge. This status adds 3 years (3 OOC days) to overall sentence." },
+    { code: "P.C. 5104", name: "Habitual Offender", effect: "Add 100 Days", description: "Decided by Judge. This status adds 100 days to overall sentence." },
+    { code: "P.C. 5105", name: "Public Nuisance Offender", effect: "Add 60 Days", description: "Decided by a Judge. This status adds 60 days to overall sentence." }
 ];
 
 // Load JSON data
@@ -84,15 +86,24 @@ function setupEventListeners() {
 function setupModifiers() {
     const modifierContainer = document.getElementById('modifier-container');
     modifiers.forEach(modifier => {
-        const label = document.createElement('label');
+        const div = document.createElement('div');
+        div.className = 'modifier-item';
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.name = 'modifier';
-        checkbox.value = modifier.name;
+        checkbox.value = modifier.code;
+        checkbox.id = modifier.code;
         checkbox.addEventListener('change', calculateTotals);
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(` ${modifier.name}`));
-        modifierContainer.appendChild(label);
+        const label = document.createElement('label');
+        label.htmlFor = modifier.code;
+        label.textContent = `${modifier.code} - ${modifier.name} (${modifier.effect})`;
+        const description = document.createElement('p');
+        description.className = 'modifier-description';
+        description.textContent = modifier.description;
+        div.appendChild(checkbox);
+        div.appendChild(label);
+        div.appendChild(description);
+        modifierContainer.appendChild(div);
     });
 }
 
@@ -172,20 +183,36 @@ function calculateTotals() {
     let totalFines = 0;
     let hutCharges = [];
 
-    const activeModifiers = Array.from(document.querySelectorAll('input[name="modifier"]:checked'))
-        .map(input => modifiers.find(m => m.name === input.value));
-    const modifierMultiplier = activeModifiers.reduce((acc, modifier) => acc * modifier.multiplier, 1);
-
     selectedCharges.forEach(charge => {
         if (charge.maxTime === 'HUT') {
             hutCharges.push(charge.code);
         } else if (charge.timeUnit === 'days') {
-            totalDays += parseInt(charge.maxTime) * modifierMultiplier;
+            totalDays += parseInt(charge.maxTime);
         } else if (charge.timeUnit === 'years') {
-            totalYears += parseInt(charge.maxTime) * modifierMultiplier;
+            totalYears += parseInt(charge.maxTime);
         }
         if (charge.maxFine !== 'N/A') {
-            totalFines += parseInt(charge.maxFine) * modifierMultiplier;
+            totalFines += parseInt(charge.maxFine);
+        }
+    });
+
+    // Apply modifiers
+    const activeModifiers = Array.from(document.querySelectorAll('input[name="modifier"]:checked'))
+        .map(input => modifiers.find(m => m.code === input.value));
+    
+    activeModifiers.forEach(modifier => {
+        if (modifier.code === "P.C. 5101") {
+            totalDays *= 0.5;
+            totalYears *= 0.5;
+            totalFines *= 0.5;
+        } else if (modifier.code === "P.C. 5102") {
+            totalDays += 60;
+        } else if (modifier.code === "P.C. 5103") {
+            totalYears += 3;
+        } else if (modifier.code === "P.C. 5104") {
+            totalDays += 100;
+        } else if (modifier.code === "P.C. 5105") {
+            totalDays += 60;
         }
     });
 
