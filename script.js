@@ -1,11 +1,10 @@
-// Ranch Roleplay Time and Fine Calculator
+// Complete script for Ranch Roleplay Time and Fine Calculator
 // Last updated: [current date]
 
 let charges = [];
 let chargeDescriptions = [];
 let selectedCharges = [];
-let tooltipTimeout;
-const modifiers = [
+let modifiers = [
     { code: "P.C. 5101", name: "Aiding and Abetting", effect: "50% of time", description: "Consists of Aiding and Abetting, Conspiracy, and Accessory After the Fact" },
     { code: "P.C. 5102", name: "Public Servants Enhancement", effect: "Add 60 Days", description: "USE ONLY IN FELONY CRIMES. Public Servant Refers to; Law Enforcement, Government and Doctors. Shall not apply to Capital Murder" },
     { code: "P.C. 5103", name: "Threat to Society", effect: "Add 3 Years", description: "Decided by Judge. This status adds 3 years (3 OOC days) to overall sentence." },
@@ -45,8 +44,8 @@ function setupAutocomplete() {
     document.addEventListener("click", (e) => {
         if (!dropdown.contains(e.target) && e.target !== input) {
             dropdown.style.display = "none";
-            hideTooltip();
         }
+        hideTooltip();
     });
 
     function populateDropdown(chargesToShow) {
@@ -61,7 +60,6 @@ function setupAutocomplete() {
                 input.value = `${charge.code} - ${charge.name}`;
                 dropdown.style.display = "none";
                 addCharge(charge);
-                hideTooltip();
             });
             div.addEventListener("mouseover", (e) => showTooltip(e, charge.code));
             div.addEventListener("mouseout", hideTooltip);
@@ -84,8 +82,8 @@ function setupModifiers() {
                 <input type="checkbox" name="modifier" value="${modifier.code}" id="${modifier.code}">
                 ${modifier.code} - ${modifier.name}
             </label>
-            <div class="modifier-effect">Effect: ${modifier.effect}</div>
-            <p class="modifier-description">${modifier.description}</p>
+            <div class="modifier-effect">${modifier.effect}</div>
+            <div class="modifier-description">${modifier.description}</div>
         `;
         div.querySelector('input').addEventListener('change', calculateTotals);
         modifierContainer.appendChild(div);
@@ -113,7 +111,6 @@ function updateSelectedChargesList() {
         li.querySelector('.remove-charge').onclick = (e) => {
             e.stopPropagation();
             removeCharge(index);
-            hideTooltip();
         };
         li.addEventListener("mouseover", (e) => showTooltip(e, charge.code));
         li.addEventListener("mouseout", hideTooltip);
@@ -122,32 +119,26 @@ function updateSelectedChargesList() {
 }
 
 function showTooltip(e, chargeCode) {
-    clearTimeout(tooltipTimeout);
-    tooltipTimeout = setTimeout(() => {
-        hideTooltip();
-        const description = chargeDescriptions.find(desc => desc.code === chargeCode)?.description;
-        if (description) {
-            const tooltip = document.createElement('div');
-            tooltip.className = 'tooltip';
-            tooltip.textContent = description;
-            document.body.appendChild(tooltip);
-            
-            const rect = e.target.getBoundingClientRect();
-            const scrollY = window.scrollY || window.pageYOffset;
-            
-            tooltip.style.left = `${rect.left}px`;
-            tooltip.style.top = `${rect.bottom + scrollY}px`;
-            tooltip.style.display = 'block';
-        }
-    }, 300);
+    hideTooltip();
+    const description = chargeDescriptions.find(desc => desc.code === chargeCode)?.description;
+    if (description) {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.textContent = description;
+        document.body.appendChild(tooltip);
+        
+        const rect = e.target.getBoundingClientRect();
+        const scrollY = window.scrollY || window.pageYOffset;
+        
+        tooltip.style.left = `${rect.right + 10}px`;
+        tooltip.style.top = `${rect.top + scrollY}px`;
+        tooltip.style.display = 'block';
+    }
 }
 
 function hideTooltip() {
-    clearTimeout(tooltipTimeout);
-    tooltipTimeout = setTimeout(() => {
-        const tooltip = document.querySelector('.tooltip');
-        if (tooltip) tooltip.remove();
-    }, 100);
+    const tooltip = document.querySelector('.tooltip');
+    if (tooltip) tooltip.remove();
 }
 
 function calculateTotals() {
