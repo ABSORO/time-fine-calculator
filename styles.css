@@ -202,6 +202,8 @@ button:hover {
 .charge-details {
     font-size: 0.9em;
     color: var(--secondary-text);
+}
+
 .modifier-buttons {
     display: flex;
     margin-left: 10px;
@@ -211,8 +213,8 @@ button:hover {
 }
 
 .modifier-button {
-    padding: 4px 8px;
-    font-size: 12px;
+    padding: 2px 4px;
+    font-size: 10px;
     background-color: var(--accent);
     color: var(--text);
     border: none;
@@ -222,11 +224,11 @@ button:hover {
 }
 
 .modifier-buttons:hover {
-    box-shadow: 0 0 5px rgba(114, 137, 218, 0.5); /* var(--accent) with some transparency */
+    box-shadow: 0 0 5px rgba(114, 137, 218, 0.5);
 }
 
 .modifier-button:active {
-    background-color: #4e5d94; /* Slightly darker than the hover state */
+    background-color: #4e5d94;
 }
 
 .modifier-button:not(:last-child)::after {
@@ -242,7 +244,6 @@ button:hover {
 .modifier-button + .modifier-button {
     margin-left: 0;
 }
-
 
 .modifier-button:hover {
     background-color: #5b6eae;
