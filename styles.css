@@ -114,3 +114,50 @@ button:hover {
 .important-info .info-item:nth-child(even) {
     background-color: #FAEBD7;  /* Light peach, slightly different shade */
 }
+
+.autocomplete {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff; 
+    border-bottom: 1px solid #d4d4d4; 
+}
+
+.autocomplete-items div:hover {
+    background-color: #e9e9e9; 
+}
+
+.autocomplete-active {
+    background-color: #DEB887 !important; 
+    color: #ffffff; 
+}
+
+.tooltip {
+    position: absolute;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    max-width: 300px;
+    z-index: 100;
+    display: none;
+}
