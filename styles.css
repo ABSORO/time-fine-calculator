@@ -207,15 +207,16 @@ button:hover {
 .modifier-buttons {
     display: flex;
     margin-left: 10px;
-    border: 1px solid var(--accent);
-    border-radius: 5px;
+    background-color: var(--background);
+    border-radius: 3px;
     overflow: hidden;
 }
 
 .modifier-button {
-    padding: 2px 4px;
-    font-size: 10px;
-    background-color: var(--accent);
+    padding: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: var(--background);
     color: var(--text);
     border: none;
     cursor: pointer;
@@ -223,30 +224,18 @@ button:hover {
     transition: background-color 0.2s ease;
 }
 
-.modifier-buttons:hover {
-    box-shadow: 0 0 5px rgba(114, 137, 218, 0.5);
-}
-
-.modifier-button:active {
-    background-color: #4e5d94;
-}
-
 .modifier-button:not(:last-child)::after {
     content: '';
     position: absolute;
     right: 0;
-    top: 20%;
-    height: 60%;
+    top: 15%;
+    height: 70%;
     width: 1px;
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.modifier-button + .modifier-button {
-    margin-left: 0;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .modifier-button:hover {
-    background-color: #5b6eae;
+    background-color: var(--hover);
 }
 
 .tooltip {
