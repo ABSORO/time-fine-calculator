@@ -173,6 +173,7 @@ button:hover {
     cursor: pointer;
     border-bottom: 1px solid var(--input-border);
     position: relative;
+    font-size: 14px;
 }
 
 .charge-item::before {
@@ -188,19 +189,25 @@ button:hover {
     background-color: var(--hover);
 }
 
-.charge-name {
+.charge-info {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
+}
+
+.charge-name {
+    margin-bottom: 5px;
 }
 
 .charge-details {
     font-size: 0.9em;
     color: var(--secondary-text);
-    margin-right: 10px;
 }
 
 .modifier-buttons {
     display: flex;
     gap: 5px;
+    margin-left: 10px;
 }
 
 .modifier-button {
@@ -229,12 +236,14 @@ button:hover {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
+.tooltip-description {
+    margin-bottom: 10px;
+}
+
 .charge-type {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
     font-size: 12px;
     font-weight: bold;
+    text-align: right;
 }
 
 .exceeded {
@@ -263,14 +272,14 @@ button:hover {
     padding: 10px 20px;
 }
 
-.capital-felony::before, .capital-felony.charge-type { background-color: var(--capital-felony); }
-.felony-first::before, .felony-first.charge-type { background-color: var(--felony-first); }
-.felony-second::before, .felony-second.charge-type { background-color: var(--felony-second); }
-.felony-third::before, .felony-third.charge-type { background-color: var(--felony-third); }
-.misdemeanor-first::before, .misdemeanor-first.charge-type { background-color: var(--misdemeanor-first); }
-.misdemeanor-second::before, .misdemeanor-second.charge-type { background-color: var(--misdemeanor-second); }
-.misdemeanor-third::before, .misdemeanor-third.charge-type { background-color: var(--misdemeanor-third); }
-.infraction::before, .infraction.charge-type { background-color: var(--infraction); }
+.capital-felony::before { background-color: var(--capital-felony); }
+.felony-first::before { background-color: var(--felony-first); }
+.felony-second::before { background-color: var(--felony-second); }
+.felony-third::before { background-color: var(--felony-third); }
+.misdemeanor-first::before { background-color: var(--misdemeanor-first); }
+.misdemeanor-second::before { background-color: var(--misdemeanor-second); }
+.misdemeanor-third::before { background-color: var(--misdemeanor-third); }
+.infraction::before { background-color: var(--infraction); }
 
 @media (max-width: 768px) {
     .charge-item {
@@ -284,6 +293,7 @@ button:hover {
 
     .modifier-buttons {
         margin-top: 5px;
+        margin-left: 0;
     }
 }
 
