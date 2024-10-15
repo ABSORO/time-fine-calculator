@@ -239,9 +239,11 @@ function calculateTotals() {
         totalFines += chargeFine;
     });
 
-    // Convert total days to years and days
-    totalYears = Math.floor(totalDays / 1440);
-    totalDays = totalDays % 1440;
+    // Convert days to years based on the specified rules
+    if (totalDays >= 401) {
+        totalYears = Math.floor((totalDays - 301) / 100) + 1;
+        totalDays = totalDays - (totalYears * 100 + 301);
+    }
 
     // Round values
     totalDays = Math.round(totalDays);
@@ -249,6 +251,7 @@ function calculateTotals() {
 
     updateDisplay(totalYears, totalDays, totalFines, hutCharges);
 }
+
 
 function updateDisplay(years, days, fines, hutCharges) {
     const timeContainer = document.getElementById('total-time-container');
