@@ -1,3 +1,6 @@
+// Complete script for Ranch Roleplay Time and Fine Calculator
+// Last updated: [current date]
+
 let charges = [];
 let chargeDescriptions = [];
 let selectedCharges = [];
@@ -17,95 +20,61 @@ Promise.all([
 
 function setupAutocomplete() {
     const input = document.getElementById("charge-search");
-    const autocompleteList = document.getElementById("autocomplete-list");
-    let currentFocus;
+    const dropdown = document.getElementById("charge-dropdown");
 
-    input.addEventListener("input", function(e) {
-        const val = this.value;
-        closeAllLists();
-        if (!val) { return false; }
-        currentFocus = -1;
+    // Populate dropdown initially
+    populateDropdown(charges);
 
+    // Toggle dropdown visibility
+    input.addEventListener("focus", () => {
+        dropdown.style.display = "block";
+    });
+
+    // Filter charges on input
+    input.addEventListener("input", function() {
         const filteredCharges = charges.filter(charge => 
-            charge.code.toLowerCase().includes(val.toLowerCase()) || 
-            charge.name.toLowerCase().includes(val.toLowerCase())
+            charge.code.toLowerCase().includes(this.value.toLowerCase()) || 
+            charge.name.toLowerCase().includes(this.value.toLowerCase())
         );
+        populateDropdown(filteredCharges);
+    });
 
-        filteredCharges.forEach(charge => {
-            const div = document.createElement("DIV");
-            div.innerHTML = `<strong>${charge.code}</strong> - ${charge.name}`;
-            div.addEventListener("click", function(e) {
-                input.value = `${charge.code} - ${charge.name}`;
-                closeAllLists();
+    // Handle click outside
+    document.addEventListener("click", function(e) {
+        if (!dropdown.contains(e.target) && e.target !== input) {
+            dropdown.style.display = "none";
+        }
+    });
+
+    function populateDropdown(chargesToShow) {
+        dropdown.innerHTML = '';
+        chargesToShow.forEach(charge => {
+            const div = document.createElement("div");
+            div.textContent = `${charge.code} - ${charge.name}`;
+            div.addEventListener("click", function() {
+                input.value = this.textContent;
+                dropdown.style.display = "none";
+                addCharge(charge);
             });
             div.addEventListener("mouseover", function(e) {
                 showTooltip(e, charge.code);
             });
             div.addEventListener("mouseout", hideTooltip);
-            autocompleteList.appendChild(div);
+            dropdown.appendChild(div);
         });
-    });
-
-    input.addEventListener("keydown", function(e) {
-        let x = document.getElementById(this.id + "autocomplete-list");
-        if (x) x = x.getElementsByTagName("div");
-        if (e.keyCode == 40) {
-            currentFocus++;
-            addActive(x);
-        } else if (e.keyCode == 38) {
-            currentFocus--;
-            addActive(x);
-        } else if (e.keyCode == 13) {
-            e.preventDefault();
-            if (currentFocus > -1) {
-                if (x) x[currentFocus].click();
-            }
-        }
-    });
-
-    function addActive(x) {
-        if (!x) return false;
-        removeActive(x);
-        if (currentFocus >= x.length) currentFocus = 0;
-        if (currentFocus < 0) currentFocus = (x.length - 1);
-        x[currentFocus].classList.add("autocomplete-active");
     }
-
-    function removeActive(x) {
-        for (let i = 0; i < x.length; i++) {
-            x[i].classList.remove("autocomplete-active");
-        }
-    }
-
-    function closeAllLists(elmnt) {
-        const x = document.getElementsByClassName("autocomplete-items");
-        for (let i = 0; i < x.length; i++) {
-            if (elmnt != x[i] && elmnt != input) {
-                x[i].parentNode.removeChild(x[i]);
-            }
-        }
-    }
-
-    document.addEventListener("click", function (e) {
-        closeAllLists(e.target);
-    });
 }
 
 function setupEventListeners() {
-    document.getElementById('add-charge').addEventListener('click', addCharge);
     document.getElementById('clear-selection').addEventListener('click', clearSelection);
 }
 
-function addCharge() {
-    const input = document.getElementById('charge-search');
-    const selectedCharge = charges.find(charge => 
-        `${charge.code} - ${charge.name}` === input.value
-    );
+function addCharge(selectedCharge) {
     if (selectedCharge) {
         selectedCharges.push(selectedCharge);
         updateSelectedChargesList();
         calculateTotals();
-        input.value = ''; // Clear the input after adding
+        document.getElementById('charge-search').value = ''; // Clear the input after adding
     }
 }
 
