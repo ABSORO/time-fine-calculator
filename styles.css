@@ -1,15 +1,15 @@
 :root {
-    --primary: #3498db;
-    --secondary: #2ecc71;
-    --background: #f5f6fa;
-    --text: #34495e;
-    --accent: #e74c3c;
-    --light: #ecf0f1;
-    --dark: #2c3e50;
+    --primary: #546e7a;
+    --secondary: #78909c;
+    --background: #eceff1;
+    --text: #263238;
+    --accent: #90a4ae;
+    --light: #cfd8dc;
+    --white: #ffffff;
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
     line-height: 1.6;
     color: var(--text);
     background-color: var(--background);
@@ -20,21 +20,20 @@ body {
 .container {
     max-width: 800px;
     margin: 0 auto;
-    background-color: var(--light);
-    padding: 30px;
+    background-color: var(--white);
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 h1, h2, h3 {
     color: var(--primary);
     border-bottom: 2px solid var(--secondary);
     padding-bottom: 10px;
-    margin-top: 0;
 }
 
 .calculator {
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 .search-section {
@@ -42,36 +41,33 @@ h1, h2, h3 {
 }
 
 input, select, button {
-    padding: 12px;
+    padding: 10px;
     font-size: 16px;
-    border: 1px solid var(--primary);
+    border: 1px solid var(--secondary);
     border-radius: 4px;
-    transition: all 0.3s ease;
 }
 
 input:focus, select:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.5);
+    border-color: var(--primary);
 }
 
 button {
     background-color: var(--secondary);
-    color: white;
+    color: var(--white);
     cursor: pointer;
-    border: none;
     transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #27ae60;
+    background-color: var(--primary);
 }
 
 .selected-charges, .results {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
+    background-color: var(--light);
+    padding: 15px;
+    border-radius: 4px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #selected-charges-list {
@@ -82,42 +78,36 @@ button:hover {
 #selected-charges-list li {
     display: flex;
     align-items: center;
-    background-color: var(--light);
-    margin-bottom: 10px;
+    background-color: var(--white);
+    margin-bottom: 5px;
     padding: 10px;
     border-radius: 4px;
-    transition: all 0.3s ease;
-}
-
-#selected-charges-list li:hover {
-    background-color: #e0e0e0;
 }
 
 .remove-charge {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     background-color: var(--accent);
-    color: white;
+    color: var(--white);
     font-size: 18px;
     margin-right: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    user-select: none;
 }
 
 .remove-charge:hover {
-    background-color: #c0392b;
+    background-color: var(--primary);
 }
 
 .info-section {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 30px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--light);
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 20px;
 }
 
 .info-section ul {
@@ -131,9 +121,9 @@ button:hover {
 
 .important-info .info-item {
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     border-radius: 4px;
-    background-color: var(--light);
+    background-color: var(--white);
 }
 
 .custom-select {
@@ -143,24 +133,23 @@ button:hover {
 
 #charge-search {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     font-size: 16px;
 }
 
 .select-items {
     position: absolute;
-    background-color: white;
+    background-color: var(--white);
     top: 100%;
     left: 0;
     right: 0;
     z-index: 99;
     max-height: 300px;
     overflow-y: auto;
-    border: 1px solid var(--primary);
+    border: 1px solid var(--secondary);
     border-top: none;
     border-radius: 0 0 4px 4px;
     display: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .select-items::-webkit-scrollbar {
@@ -173,22 +162,18 @@ button:hover {
 }
 
 .select-items::-webkit-scrollbar-thumb {
-    background-color: var(--primary);
+    background-color: var(--secondary);
     border-radius: 4px;
     border: 2px solid var(--light);
-}
-
-.select-items::-webkit-scrollbar-thumb:hover {
-    background-color: var(--dark);
 }
 
 .select-items div {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px;
+    padding: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    border-bottom: 1px solid var(--light);
 }
 
 .select-items div:hover {
@@ -202,38 +187,30 @@ button:hover {
 
 .tooltip {
     position: absolute;
-    background-color: var(--dark);
-    color: white;
+    background-color: var(--primary);
+    color: var(--white);
     padding: 10px;
     border-radius: 4px;
     font-size: 14px;
     max-width: 300px;
     z-index: 100;
-    display: none;
-    pointer-events: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 #modifier-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 30px;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .modifier-item {
-    background-color: white;
-    border: 1px solid var(--primary);
-    border-radius: 8px;
-    padding: 15px;
-    width: calc(50% - 7.5px);
+    background-color: var(--white);
+    border: 1px solid var(--secondary);
+    border-radius: 4px;
+    padding: 10px;
+    width: calc(33.33% - 7px);
     box-sizing: border-box;
-    transition: all 0.3s ease;
-}
-
-.modifier-item:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
 }
 
 .modifier-item label {
@@ -241,27 +218,32 @@ button:hover {
     align-items: center;
     font-weight: bold;
     margin-bottom: 5px;
-    color: var(--primary);
+    font-size: 0.9em;
 }
 
 .modifier-item input[type="checkbox"] {
-    margin-right: 10px;
-    accent-color: var(--secondary);
+    margin-right: 5px;
 }
 
 .modifier-effect {
-    font-size: 0.9em;
-    color: var(--accent);
-    margin-bottom: 5px;
+    font-size: 0.8em;
+    color: var(--primary);
+    margin-bottom: 3px;
 }
 
 .modifier-description {
-    font-size: 0.9em;
+    font-size: 0.8em;
     color: var(--text);
-    margin-top: 5px;
+    margin: 0;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .modifier-item {
+        width: calc(50% - 5px);
+    }
+}
+
+@media (max-width: 480px) {
     .modifier-item {
         width: 100%;
     }
