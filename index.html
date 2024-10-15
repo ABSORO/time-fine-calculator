@@ -5,83 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ranch Roleplay Time and Fine Calculator</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>Time and Fine Calculator</h1>
-        <p>Use this calculator to determine the total sentencing time and fines based on selected charges from the State of Monroe Penal Code.</p>
+        <header>
+            <h1>Time and Fine Calculator</h1>
+            <p>Calculate sentencing time and fines based on the State of Monroe Penal Code.</p>
+        </header>
 
-        <div class="calculator">
-            <div class="search-section">
+        <main class="calculator">
+            <section class="search-section">
                 <div class="custom-select">
                     <input type="text" id="charge-search" placeholder="Search charges">
-                    <div class="select-items" id="charge-dropdown">
-                        <!-- Charges will be populated here by JavaScript -->
-                    </div>
+                    <div class="select-items" id="charge-dropdown"></div>
                 </div>
-            </div>
+            </section>
 
-            <div class="selected-charges">
+            <section class="selected-charges">
                 <h2>Selected Charges</h2>
-                <ul id="selected-charges-list">
-                    <!-- Selected charges will be displayed here -->
-                </ul>
-            </div>
+                <ul id="selected-charges-list"></ul>
+            </section>
 
-            <div id="modifier-container">
+            <section id="modifier-container">
                 <h2>Modifiers</h2>
-                <!-- Modifiers will be populated here by JavaScript -->
-            </div>
+            </section>
 
-            <div class="results">
+            <section class="results">
                 <h2>Results</h2>
                 <div id="total-time-container">
                     <p>Total Sentencing Time: <span id="total-time">0 years, 0 days</span></p>
                 </div>
                 <p>Total Fines: <span id="total-fines">$0</span></p>
-            </div>
+            </section>
 
             <button id="clear-selection">Clear Selection</button>
-        </div>
+        </main>
 
-        <div class="info-section important-info">
+        <aside class="info-section important-info">
             <h2>Important Information</h2>
             <ul>
-                <li class="info-item">HUT = Hold Until Trial, this means that a Judge shall sentence or give them a trial depending on the individual's entered plea.</li>
-                <li class="info-item">If a trial is required, open an LFM ticket.</li>
-                <li class="info-item">When Judges are in town, a person may plea to all charges listed and the Judge will handle all sentencing or fine assignment related to any case.</li>
-                <li class="info-item">Judges may deviate from sentences listed here but MUST respect the drive for story and must never CK or sentence to life without explicit Admin approval or consent from the opposing players.</li>
-                <li class="info-item">While lawmen should feel comfortable charging criminals with the listed times and fines, they are also encouraged to lower them if the circumstances call for it. Use your judgement and help foster good storytelling so that both sides enjoy the encounters.</li>
-                <li class="info-item">If caught blatantly committing a crime, not guilty verdicts will not be entertained.</li>
-                <li class="info-item">Persons may plea Not Guilty to 1st Degree Felonies or Higher as well as any individual charges with a stated time of 1 Year or Higher. Anything else shall be appeal after the fact or handled by a Judge on scene.</li>
+                <li class="info-item">HUT (Hold Until Trial): A Judge shall sentence or give a trial based on the individual's plea.</li>
+                <li class="info-item">For required trials, open an LFM ticket.</li>
+                <li class="info-item">When Judges are present, individuals may plea to all charges for sentencing.</li>
+                <li class="info-item">Judges may adjust sentences but must respect storytelling. No CK or life sentences without Admin approval.</li>
+                <li class="info-item">Lawmen can adjust charges to foster good storytelling.</li>
+                <li class="info-item">Blatant crimes will not receive not guilty verdicts.</li>
+                <li class="info-item">Not Guilty pleas allowed for 1st Degree Felonies or charges with 1+ Year sentences. Others require appeals or on-scene Judge handling.</li>
             </ul>
-        </div>
+        </aside>
 
-        <div class="info-section">
-            <h2>How Sentencing Time is Calculated</h2>
+        <aside class="info-section">
+            <h2>Sentencing Time Calculation</h2>
             <ul>
-                <li><strong>Charges Listed in Days:</strong>
+                <li><strong>Charges in Days:</strong>
                     <ul>
-                        <li>Total days are summed.</li>
-                        <li>If total days are less than 401, the sentencing time remains in days.</li>
-                        <li>If total days are 401 or more, the sentencing time is converted to years:
+                        <li>Sum total days</li>
+                        <li>If < 401 days, keep as days</li>
+                        <li>If ≥ 401 days, convert to years:
                             <ul>
                                 <li>401 - 500 Days: 1 Year</li>
                                 <li>501 - 600 Days: 2 Years</li>
-                                <li>And so on, incrementing by 1 year for each additional 100 days.</li>
+                                <li>+1 year per additional 100 days</li>
                             </ul>
                         </li>
                     </ul>
                 </li>
-                <li><strong>Charges with Fixed Sentencing in Years:</strong>
-                    <ul>
-                        <li>Fixed years are added directly to the total years.</li>
-                        <li>Not converted into days.</li>
-                    </ul>
-                </li>
+                <li><strong>Fixed Year Sentences:</strong> Added directly to total years</li>
             </ul>
-            <p><strong>Note:</strong> Charges listed as years in the penal code are treated as 1440 days (24h) each. Charges not listed as years are added up using the conversion method described above.</p>
-        </div>
+            <p><strong>Note:</strong> Year charges count as 1440 days each. Non-year charges use the above conversion.</p>
+        </aside>
     </div>
 
     <script src="script.js"></script>
