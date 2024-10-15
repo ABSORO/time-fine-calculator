@@ -44,6 +44,7 @@ function setupAutocomplete() {
         if (!dropdown.contains(e.target) && e.target !== input) {
             dropdown.style.display = "none";
         }
+        hideTooltip(); // Hide tooltip when clicking outside
     });
 
     function populateDropdown(chargesToShow) {
@@ -55,6 +56,7 @@ function setupAutocomplete() {
                 input.value = this.textContent;
                 dropdown.style.display = "none";
                 addCharge(charge);
+                hideTooltip(); // Hide tooltip when charge is selected
             });
             div.addEventListener("mouseover", function(e) {
                 showTooltip(e, charge.code);
@@ -88,7 +90,11 @@ function updateSelectedChargesList() {
         const removeButton = document.createElement('span');
         removeButton.textContent = '−';
         removeButton.className = 'remove-charge';
-        removeButton.onclick = () => removeCharge(index);
+        removeButton.onclick = (e) => {
+            e.stopPropagation(); // Prevent event from bubbling up
+            removeCharge(index);
+            hideTooltip(); // Hide tooltip when charge is removed
+        };
         li.appendChild(removeButton);
         
         // Add charge text
@@ -107,6 +113,7 @@ function updateSelectedChargesList() {
 }
 
 function showTooltip(e, chargeCode) {
+    hideTooltip(); // Hide any existing tooltip
     const description = chargeDescriptions.find(desc => desc.code === chargeCode)?.description;
     if (description) {
         const tooltip = document.createElement('div');
@@ -198,4 +205,5 @@ function clearSelection() {
     hutMessages.forEach(msg => msg.remove());
     
     document.getElementById('charge-description').textContent = '';
+    hideTooltip(); // Hide tooltip when selection is cleared
 }
