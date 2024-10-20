@@ -213,34 +213,41 @@ function hideTooltip() {
 }
 
 function calculateTotals() {
-    let yearCharges = 0;
-    let dayCharges = 0;
-    let totalFines = 0;
-    let hutCharges = [];
+  let yearCharges = 0;
+  let dayCharges = 0;
+  let totalFines = 0;
+  let hutCharges = [];
+  let ttsYears = 0;
 
-    selectedCharges.forEach(charge => {
-        if (charge.maxTime === 'HUT') {
-            hutCharges.push(charge.code);
-        } else if (charge.timeUnit === 'years') {
-            yearCharges += parseFloat(charge.maxTime);
-        } else if (charge.timeUnit === 'days') {
-            dayCharges += parseInt(charge.maxTime);
-        }
-        
-        if (charge.maxFine !== 'N/A') {
-            totalFines += parseInt(charge.maxFine);
-        }
-    });
-
-    // Convert day charges to years and days
-    let additionalYears = 0;
-    if (dayCharges >= 401) {
-        additionalYears = 1 + Math.floor((dayCharges - 401) / 100);
-        dayCharges = dayCharges - (401 + (additionalYears - 1) * 100);
+  selectedCharges.forEach(charge => {
+    if (charge.maxTime === 'HUT') {
+      hutCharges.push(charge.code);
+    } else if (charge.timeUnit === 'years') {
+      yearCharges += parseFloat(charge.maxTime);
+    } else if (charge.timeUnit === 'days') {
+      dayCharges += parseInt(charge.maxTime);
     }
 
-    let totalYears = Math.floor(yearCharges) + additionalYears;
-    let totalDays = Math.round((yearCharges % 1) * 1440 + dayCharges);
+    if (charge.maxFine !== 'NA') {
+      totalFines += parseInt(charge.maxFine);
+    }
+
+    // Add TTS years separately
+    if (charge.ttsYears) {
+      ttsYears += charge.ttsYears;
+    }
+  });
+
+  // Convert day charges to years and days
+  let additionalYears = 0;
+  if (dayCharges > 401) {
+    additionalYears = 1 + Math.floor((dayCharges - 401) / 100);
+    dayCharges = (dayCharges - 401 - (additionalYears - 1) * 100);
+  }
+
+  let totalYears = Math.floor(yearCharges + additionalYears + ttsYears);
+  let totalDays = Math.round((yearCharges % 1) * 1440 + dayCharges);
+
 
     // Adjust if totalDays is 1440 or more
     if (totalDays >= 1440) {
