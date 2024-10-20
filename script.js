@@ -128,21 +128,22 @@ function addCharge(charge, modifier = null) {
         chargeWithModifier.modifier = modifier;
         // Apply modifier effect immediately
         switch(modifier.code) {
-            case "P.C. 5101":
+            case "P.C. 5101": // AA
                 chargeWithModifier.maxTime = charge.timeUnit === 'years' ? 
                     charge.maxTime * 0.5 : Math.round(charge.maxTime * 0.5);
                 chargeWithModifier.maxFine = Math.round(charge.maxFine * 0.5);
                 break;
-            case "P.C. 5102":
+            case "P.C. 5102": // PSE
                 if (charge.timeUnit === 'days') chargeWithModifier.maxTime += 60;
                 break;
-            case "P.C. 5103":
-                chargeWithModifier.maxTime += charge.timeUnit === 'years' ? 3 : 3 * 1440;
+            case "P.C. 5103": // TTS
+                // Add TTS years separately without conversion
+                chargeWithModifier.ttsYears = 3;
                 break;
-            case "P.C. 5104":
+            case "P.C. 5104": // HO
                 if (charge.timeUnit === 'days') chargeWithModifier.maxTime += 100;
                 break;
-            case "P.C. 5105":
+            case "P.C. 5105": // PNO
                 if (charge.timeUnit === 'days') chargeWithModifier.maxTime += 60;
                 break;
         }
@@ -213,41 +214,38 @@ function hideTooltip() {
 }
 
 function calculateTotals() {
-  let yearCharges = 0;
-  let dayCharges = 0;
-  let totalFines = 0;
-  let hutCharges = [];
-  let ttsYears = 0;
+    let yearCharges = 0;
+    let dayCharges = 0;
+    let totalFines = 0;
+    let hutCharges = [];
+    let ttsYears = 0;
 
-  selectedCharges.forEach(charge => {
-    if (charge.maxTime === 'HUT') {
-      hutCharges.push(charge.code);
-    } else if (charge.timeUnit === 'years') {
-      yearCharges += parseFloat(charge.maxTime);
-    } else if (charge.timeUnit === 'days') {
-      dayCharges += parseInt(charge.maxTime);
+    selectedCharges.forEach(charge => {
+        if (charge.maxTime === 'HUT') {
+            hutCharges.push(charge.code);
+        } else if (charge.timeUnit === 'years') {
+            yearCharges += parseFloat(charge.maxTime);
+        } else if (charge.timeUnit === 'days') {
+            dayCharges += parseInt(charge.maxTime);
+        }
+
+        if (charge.maxFine !== 'NA') {
+            totalFines += parseInt(charge.maxFine);
+        }
+
+        // Add TTS years separately
+        ttsYears += charge.ttsYears || 0;
+    });
+
+    // Convert day charges to years and days
+    let additionalYears = 0;
+    if (dayCharges > 401) {
+        additionalYears = 1 + Math.floor((dayCharges - 401) / 100);
+        dayCharges = dayCharges - 401 - (additionalYears - 1) * 100;
     }
 
-    if (charge.maxFine !== 'NA') {
-      totalFines += parseInt(charge.maxFine);
-    }
-
-    // Add TTS years separately
-    if (charge.ttsYears) {
-      ttsYears += charge.ttsYears;
-    }
-  });
-
-  // Convert day charges to years and days
-  let additionalYears = 0;
-  if (dayCharges > 401) {
-    additionalYears = 1 + Math.floor((dayCharges - 401) / 100);
-    dayCharges = (dayCharges - 401 - (additionalYears - 1) * 100);
-  }
-
-  let totalYears = Math.floor(yearCharges + additionalYears + ttsYears);
-  let totalDays = Math.round((yearCharges % 1) * 1440 + dayCharges);
-
+    let totalYears = Math.floor(yearCharges + additionalYears + ttsYears);
+    let totalDays = Math.round((yearCharges % 1) * 1440 + dayCharges);
 
     // Adjust if totalDays is 1440 or more
     if (totalDays >= 1440) {
@@ -261,7 +259,6 @@ function calculateTotals() {
 
     updateDisplay(totalYears, totalDays, totalFines, hutCharges);
 }
-
 function updateDisplay(years, days, fines, hutCharges) {
     const timeContainer = document.getElementById('total-time-container');
     timeContainer.innerHTML = '';
