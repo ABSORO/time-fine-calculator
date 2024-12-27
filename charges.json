@@ -23,7 +23,7 @@
     { "code": "P.C. 2302", "name": "Grand Theft", "maxTime": 60, "maxFine": 200, "timeUnit": "days" },
     { "code": "P.C. 2303", "name": "Fraud", "maxTime": 60, "maxFine": 60, "timeUnit": "days" },
     { "code": "P.C. 2304", "name": "Obstruction of Justice", "maxTime": 60, "maxFine": 50, "timeUnit": "days" },
-    { "code": "P.C. 2305", "name": "Business Robbery", "maxTime": 100, "maxFine": 70, "timeUnit": "days" },
+    { "code": "P.C. 2305", "name": "Business Robbery", "maxTime": 200, "maxFine": 70, "timeUnit": "days" },
     { "code": "P.C. 2306", "name": "Perjury", "maxTime": 1, "maxFine": 0, "timeUnit": "years" },
     { "code": "P.C. 2307", "name": "Negligence of Duty", "maxTime": 1, "maxFine": 0, "timeUnit": "years" },
     { "code": "P.C. 2308", "name": "Manufacturing Illegal Goods and Weapons", "maxTime": 1, "maxFine": 250, "timeUnit": "years" },
