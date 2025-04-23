@@ -94,7 +94,7 @@ function populateDropdown(chargesToShow) {
 function getChargeClass(code) {
     const pcNumber = parseInt(code.split(' ')[1]);
     if (pcNumber >= 1101 && pcNumber <= 1105) return 'capital-felony';
-    if (pcNumber >= 2101 && pcNumber <= 2107) return 'felony-first';
+    if (pcNumber >= 2101 && pcNumber <= 2108) return 'felony-first';
     if (pcNumber >= 2201 && pcNumber <= 2207) return 'felony-second';
     if (pcNumber >= 2301 && pcNumber <= 2312) return 'felony-third';
     if (pcNumber >= 3101 && pcNumber <= 3111) return 'misdemeanor-first';
